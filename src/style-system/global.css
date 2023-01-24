@@ -1,0 +1,34 @@
+@font-face {
+  font-family: 'CircularStd-Bold';
+  src: local('CircularStd-Bold'),
+    url('./fonts/CircularStd-Bold.otf') format('otf');
+}
+
+@font-face {
+  font-family: 'CircularStd-Book';
+  src: local('CircularStd-Book'),
+    url('./fonts/CircularStd-Bold.otf') format('otf');
+}
+
+@font-face {
+  font-family: 'CircularStd-Medium';
+  src: local('Spoof-Regular'),
+    url('./fonts/CircularStd-Medium.otf') format('otf');
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: 'CircularStd-Bold', 'CircularStd-Medium', 'CircularStd-Book',
+    sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}

@@ -1,0 +1,48 @@
+{
+  "name": "next-js-ts-mui-graphql-starter-template",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "format": "prettier --write ."
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "src/**/*.{js,ts,tsx}": "prettier --write",
+    "pages/**/*.{js,ts,tsx}": "prettier --write"
+  },
+  "dependencies": {
+    "@apollo/client": "^3.5.10",
+    "@emotion/cache": "11.10.5",
+    "@emotion/react": "11.10.5",
+    "@emotion/server": "11.10.0",
+    "@emotion/styled": "11.10.5",
+    "@mui/icons-material": "^5.5.1",
+    "@mui/material": "5.11.5",
+    "@mui/styles": "^5.6.0",
+    "@svgr/webpack": "^6.1.2",
+    "graphql": "^16.3.0",
+    "graphql-tag": "^2.12.6",
+    "next": "13.1.4",
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "latest",
+    "@types/react": "latest",
+    "babel-plugin-module-resolver": "^4.1.0",
+    "eslint": "latest",
+    "eslint-config-next": "latest",
+    "husky": "^4.3.0",
+    "lint-staged": "^12.3.5",
+    "prettier": "^2.3.0",
+    "typescript": "latest"
+  }
+}
