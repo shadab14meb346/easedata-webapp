@@ -105,7 +105,6 @@ export const useLoginMutation = () => {
         },
       });
       setData(data.login);
-      console.log(data);
       localStorage.setItem('jwt-token', data.login.token);
       localStorage.setItem('user', JSON.stringify(data.login.user));
     } catch (e: any) {
