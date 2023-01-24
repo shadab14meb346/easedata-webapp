@@ -1,6 +1,7 @@
 import { gql } from 'graphql-tag';
 import { client } from '@graphql/index';
 import { useState } from 'react';
+import { User } from 'types/user';
 
 const REGISTER_MUTATION = gql`
   mutation Mutation($input: RegistrationInput!) {
@@ -26,6 +27,19 @@ const GET_ME_QUERY = gql`
     }
   }
 `;
+const LOGIN_MUTATION = gql`
+  mutation Login($input: LoginInput!) {
+    login(input: $input) {
+      user {
+        id
+        email
+        name
+        admin
+      }
+      token
+    }
+  }
+`;
 
 interface RegisterData {
   register: {
@@ -38,6 +52,14 @@ interface RegisterData {
     };
     token: string;
   };
+}
+interface LoginResponse {
+  user: User;
+  token: string;
+}
+interface ILoginInput {
+  email: string;
+  password: string;
 }
 export const useRegisterMutation = () => {
   const [data, setData] = useState<RegisterData | null>(null);
@@ -69,6 +91,38 @@ export const useRegisterMutation = () => {
   };
 };
 
+export const useLoginMutation = () => {
+  const [data, setData] = useState<LoginResponse | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const login = async (input: ILoginInput) => {
+    try {
+      setLoading(true);
+      const { data } = await client.mutate({
+        mutation: LOGIN_MUTATION,
+        variables: {
+          input,
+        },
+      });
+      setData(data.login);
+      console.log(data);
+      localStorage.setItem('jwt-token', data.login.token);
+      localStorage.setItem('user', JSON.stringify(data.login.user));
+    } catch (e: any) {
+      setError(e.message);
+      localStorage.removeItem('user');
+      localStorage.removeItem('jwt-token');
+    } finally {
+      setLoading(false);
+    }
+  };
+  return {
+    login,
+    loading,
+    error,
+    data,
+  };
+};
 export const getMe = async () => {
   return await client.query({
     query: GET_ME_QUERY,

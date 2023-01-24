@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useEffect } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -12,6 +12,8 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 
 import * as ROUTES from 'src/constants/routes';
+import { useLoginMutation } from '@http/auth';
+import { useRouter } from 'next/router';
 
 function Copyright(props: any) {
   return (
@@ -32,12 +34,19 @@ function Copyright(props: any) {
 }
 
 const SignInForm = () => {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const { login, data, error, loading } = useLoginMutation();
+  const router = useRouter();
+  useEffect(() => {
+    if (!loading && !error && data?.token) {
+      router.replace(ROUTES.DASHBOARD);
+    }
+  }, [data, error, loading]);
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
+    await login({
+      email: data.get('email') as string,
+      password: data.get('password') as string,
     });
   };
 
@@ -88,7 +97,7 @@ const SignInForm = () => {
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
           >
-            Sign In
+            {loading ? 'Loading...' : 'Sign In'}
           </Button>
           <Grid container>
             {/* <Grid item xs>
