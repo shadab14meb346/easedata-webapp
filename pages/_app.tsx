@@ -11,10 +11,11 @@ import { AuthProvider } from '@utils/authContext';
 import { useApollo } from '@graphql/apollo';
 import ClientOnly from 'src/components/ClientOnly';
 import PageLoader from 'src/components/PageLoader';
-// import { getUser } from '@graphql/queries/user';
 import theme from '../src/style-system/theme';
 import '../src/style-system/global.css';
 import createEmotionCache from 'src/createEmotionCache';
+import { getMe } from '@http/auth';
+
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
 
@@ -23,8 +24,8 @@ interface MyAppProps extends AppProps {
 }
 
 interface IAuthState {
-  token?: String;
-  user?: any;
+  token?: string | null;
+  user?: any | null;
 }
 
 const MyApp = (props: MyAppProps) => {
@@ -36,7 +37,8 @@ const MyApp = (props: MyAppProps) => {
 
   // === auth
   const [authState, setAuthState] = React.useState<IAuthState>({
-    token: '',
+    token: null,
+    user: null,
   });
   const setUserAuthInfo = (data: IAuthState) => {
     setAuthState(data);
@@ -58,9 +60,8 @@ const MyApp = (props: MyAppProps) => {
       return;
     }
     try {
-      // const res = await getUser();
-      // const userData = res?.data?.getMe;
-      const userData = {};
+      const res = await getMe();
+      const userData = res?.data?.getMe;
       setAuthState({ token, user: userData });
     } catch (error) {
       // error
@@ -103,9 +104,6 @@ const MyApp = (props: MyAppProps) => {
     <AuthProvider
       value={{
         authState,
-        setAuthState: (userAuthInfo: IAuthState) =>
-          setUserAuthInfo(userAuthInfo),
-        isUserAuthenticated,
       }}
     >
       <ApolloProvider client={apolloClient}>

@@ -16,6 +16,16 @@ const REGISTER_MUTATION = gql`
     }
   }
 `;
+const GET_ME_QUERY = gql`
+  query GetMe {
+    getMe {
+      id
+      email
+      name
+      admin
+    }
+  }
+`;
 
 interface RegisterData {
   register: {
@@ -57,4 +67,10 @@ export const useRegisterMutation = () => {
     error,
     data,
   };
+};
+
+export const getMe = async () => {
+  return await client.query({
+    query: GET_ME_QUERY,
+  });
 };
