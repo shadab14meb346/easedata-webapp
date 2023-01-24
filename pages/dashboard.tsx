@@ -2,16 +2,17 @@ import type { NextPage } from 'next';
 import Head from 'next/head';
 
 import WithAuth from '@utils/withAuth';
+import Dashboard from '@components/Dashboard';
 
-const Dashboard: NextPage = () => {
+const DashboardPage: NextPage = () => {
   return (
     <>
       <Head>
         <title>Dashboard</title>
       </Head>
-      <h1>Welcome to the dashboard</h1>
+      <Dashboard />
     </>
   );
 };
 
-export default WithAuth(Dashboard);
+export default WithAuth(DashboardPage);
