@@ -3,8 +3,9 @@ import Head from 'next/head';
 
 import FullLogo from '@components/common/FullLogo';
 import SignUpForm from '@components/SignUpForm';
+import WithAuth from '@utils/withAuth';
 
-const SignIn: NextPage = () => {
+const SignUp: NextPage = () => {
   return (
     <>
       <Head>
@@ -15,5 +16,8 @@ const SignIn: NextPage = () => {
     </>
   );
 };
+SignUp.getInitialProps = () => {
+  return { isRestricted: true };
+};
 
-export default SignIn;
+export default WithAuth(SignUp);
