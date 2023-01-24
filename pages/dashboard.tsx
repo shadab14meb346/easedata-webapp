@@ -1,9 +1,9 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
 
-import TopAppBar from '@components/TopAppBar';
+import WithAuth from '@utils/withAuth';
 
-const Home: NextPage = () => {
+const Dashboard: NextPage = () => {
   return (
     <>
       <Head>
@@ -14,4 +14,4 @@ const Home: NextPage = () => {
   );
 };
 
-export default Home;
+export default WithAuth(Dashboard);

@@ -34,20 +34,10 @@ const MyApp = (props: MyAppProps) => {
   const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
   const [tokenBeingValidated, setTokenBeingValidated] = useState<boolean>(true);
-
-  // === auth
   const [authState, setAuthState] = React.useState<IAuthState>({
     token: null,
     user: null,
   });
-  const setUserAuthInfo = (data: IAuthState) => {
-    setAuthState(data);
-  };
-  // checks if the user is authenticated or not
-  const isUserAuthenticated = () => {
-    return !!authState?.token;
-  };
-  // ========
 
   useEffect(() => {
     checkForTokenValidation();
@@ -64,7 +54,6 @@ const MyApp = (props: MyAppProps) => {
       const userData = res?.data?.getMe;
       setAuthState({ token, user: userData });
     } catch (error) {
-      // error
       localStorage.removeItem('jwt-token');
       setAuthState({});
     } finally {
@@ -87,7 +76,7 @@ const MyApp = (props: MyAppProps) => {
   /**
    * useEffect run on every route change
    * use '[' for checking the route is dynamic or not
-   * if route includes a queryPrams and route is not dynmaic than replace the route value.
+   * if route includes a queryPrams and route is not dynamic than replace the route value.
    */
   useEffect(() => {
     if (
@@ -104,6 +93,7 @@ const MyApp = (props: MyAppProps) => {
     <AuthProvider
       value={{
         authState,
+        setAuthState: (userAuthInfo: IAuthState) => setAuthState(userAuthInfo),
       }}
     >
       <ApolloProvider client={apolloClient}>

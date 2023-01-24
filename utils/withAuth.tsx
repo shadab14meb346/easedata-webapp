@@ -17,9 +17,13 @@ const WithAuth = (Component: any) => {
     // we should not let user visit login page if he is logged in
     const { isRestricted } = props;
 
-    if (isRestricted && redirectAfterSignInUrl) {
-      router.push(redirectAfterSignInUrl);
-      return null;
+    if (!isAuthenticated && !isRestricted) {
+      router.push(ROUTES.SIGN_IN);
+      return;
+    }
+    if (isRestricted && isAuthenticated) {
+      router.replace(ROUTES.DASHBOARD || redirectAfterSignInUrl);
+      return;
     }
 
     return <Component {...props} />;

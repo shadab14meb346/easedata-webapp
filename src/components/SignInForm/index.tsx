@@ -13,7 +13,7 @@ import Container from '@mui/material/Container';
 
 import * as ROUTES from 'src/constants/routes';
 import { useLoginMutation } from '@http/auth';
-import { useRouter } from 'next/router';
+import useAuth from '@utils/useAuth';
 
 function Copyright(props: any) {
   return (
@@ -35,10 +35,13 @@ function Copyright(props: any) {
 
 const SignInForm = () => {
   const { login, data, error, loading } = useLoginMutation();
-  const router = useRouter();
+  const { setAuthState } = useAuth();
   useEffect(() => {
     if (!loading && !error && data?.token) {
-      router.replace(ROUTES.DASHBOARD);
+      setAuthState({
+        token: data.token,
+        user: data.user,
+      });
     }
   }, [data, error, loading]);
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
