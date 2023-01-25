@@ -23,7 +23,7 @@ interface MyAppProps extends AppProps {
   emotionCache?: EmotionCache;
 }
 
-interface IAuthState {
+export interface IAuthState {
   token?: string | null;
   user?: any | null;
 }

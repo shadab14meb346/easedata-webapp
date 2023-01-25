@@ -6,7 +6,12 @@ import useAuth from '@utils/useAuth';
 
 const Dashboard = () => {
   const classes = useStyles();
-  const { authState } = useAuth();
+  const { authState, setAuthState } = useAuth();
+  const handleLogout = () => {
+    setAuthState({});
+    localStorage.removeItem('user');
+    localStorage.removeItem('jwt-token');
+  };
 
   return (
     <>
@@ -24,7 +29,9 @@ const Dashboard = () => {
               <FullLogo />
             </div>
           </div>
-          <Button variant="outlined">Log Out</Button>
+          <Button variant="outlined" onClick={handleLogout}>
+            Log Out
+          </Button>
         </Toolbar>
       </AppBar>
       <Box

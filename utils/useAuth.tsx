@@ -1,8 +1,13 @@
+import { IAuthState } from 'pages/_app';
 import React from 'react';
 import { AuthContext } from './authContext';
 
-const useAuth = (): any => {
-  const context = React.useContext(AuthContext);
+interface IAuthContextType {
+  authState: IAuthState;
+  setAuthState: (authState: IAuthState) => {};
+}
+const useAuth = () => {
+  const context = React.useContext(AuthContext) as IAuthContextType;
   return context;
 };
 
