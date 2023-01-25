@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useEffect } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -12,6 +12,8 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 
 import * as ROUTES from 'src/constants/routes';
+import { useRegisterMutation } from '@http/auth';
+import useAuth from '@utils/useAuth';
 
 function Copyright(props: any) {
   return (
@@ -32,12 +34,23 @@ function Copyright(props: any) {
 }
 
 const SignUpForm = () => {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const { register, loading, error, data } = useRegisterMutation();
+  const { setAuthState } = useAuth();
+
+  useEffect(() => {
+    if (!loading && !error && data?.token) {
+      setAuthState({
+        token: data.token,
+        user: data.user,
+      });
+    }
+  }, [data, error, loading]);
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
+    await register({
+      email: data.get('email') as string,
+      password: data.get('password') as string,
     });
   };
 

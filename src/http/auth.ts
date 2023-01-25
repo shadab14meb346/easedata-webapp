@@ -11,7 +11,6 @@ const REGISTER_MUTATION = gql`
         email
         name
         admin
-        isAccountActivated
       }
       token
     }
@@ -41,17 +40,9 @@ const LOGIN_MUTATION = gql`
   }
 `;
 
-interface RegisterData {
-  register: {
-    user: {
-      id: string;
-      email: string;
-      name: string;
-      admin: boolean;
-      isAccountActivated: boolean;
-    };
-    token: string;
-  };
+interface RegisterResponse {
+  user: User;
+  token: string;
 }
 interface LoginResponse {
   user: User;
@@ -61,22 +52,24 @@ interface ILoginInput {
   email: string;
   password: string;
 }
+interface IRegisterInput {
+  email: string;
+  password: string;
+}
 export const useRegisterMutation = () => {
-  const [data, setData] = useState<RegisterData | null>(null);
+  const [data, setData] = useState<RegisterResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const register = async (email: string) => {
+  const register = async (input: IRegisterInput) => {
     try {
       setLoading(true);
       const { data } = await client.mutate({
         mutation: REGISTER_MUTATION,
         variables: {
-          input: {
-            email,
-          },
+          input,
         },
       });
-      setData(data);
+      setData(data.register);
     } catch (e: any) {
       setError(e.message);
     } finally {
