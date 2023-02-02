@@ -17,7 +17,7 @@ const ConnectionCard = ({ type, createdAt }: IConnectionCardProp) => {
           <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
             {type}
           </Typography>
-          <Typography variant="caption">Created</Typography>
+          <Typography variant="body2">Created On</Typography>
           <Typography variant="caption">{createdAt}</Typography>
         </CardContent>
       </Card>
