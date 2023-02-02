@@ -3,9 +3,13 @@ import theme from 'src/style-system/theme';
 
 export const useStyles = makeStyles({
   main: {
-    width: '100%',
     display: 'flex',
-    alignItems: 'center',
     justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'column',
+    marginTop: theme.spacing(1),
+  },
+  card: {
+    minHeight: 250,
   },
 });

@@ -3,6 +3,9 @@ import { Toolbar, AppBar, Button, Box, Typography } from '@mui/material';
 import { useStyles } from './useStyles';
 import FullLogo from '@components/common/FullLogo';
 import useAuth from '@utils/useAuth';
+import DataSources from './DataSources';
+import AvailableDataSources from './AvailableDataSources';
+import DashboardTabs from './DashboardTabs';
 
 const Dashboard = () => {
   const classes = useStyles();
@@ -38,12 +41,14 @@ const Dashboard = () => {
         display="flex"
         justifyContent="center"
         alignItems="center"
+        flexDirection="column"
         marginTop={2}
       >
         <Typography variant="h6">
           Welcome to the dashboard {authState.user.email}
         </Typography>
       </Box>
+      <DashboardTabs />
     </>
   );
 };
