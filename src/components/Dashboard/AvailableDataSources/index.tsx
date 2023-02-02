@@ -9,9 +9,6 @@ const AvailableDataSources = () => {
     <div className={classes.main}>
       <Box marginTop={1} display="flex">
         <ConnectionCard createdAt="12-10-22" type="Google Analytics" />
-        <ConnectionCard createdAt="12-10-22" type="Google Analytics" />
-        <ConnectionCard createdAt="12-10-22" type="Google Analytics" />
-        <ConnectionCard createdAt="12-10-22" type="Google Analytics" />
       </Box>
     </div>
   );
