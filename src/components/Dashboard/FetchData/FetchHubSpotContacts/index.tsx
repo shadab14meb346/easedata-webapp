@@ -12,7 +12,7 @@ import { useState } from 'react';
 import { useStyles } from './useStyles';
 
 interface IFetchHubSpotContactsProps {
-  selectDataSource?: number;
+  selectDataSource: string | null;
 }
 const FetchHubSpotContacts = ({
   selectDataSource,
