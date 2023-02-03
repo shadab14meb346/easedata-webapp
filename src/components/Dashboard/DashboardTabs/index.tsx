@@ -3,6 +3,7 @@ import { Typography, Box, Tabs, Tab } from '@mui/material';
 
 import DataSources from '../DataSources';
 import AvailableDataSources from '../AvailableDataSources';
+import FetchData from '../FetchData';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -41,12 +42,16 @@ const DashboardTabs = () => {
       <Tabs value={value} onChange={handleChange} centered>
         <Tab label="Add Data Sources" />
         <Tab label="Your Added Data Sources" />
+        <Tab label="Fetch Data" />
       </Tabs>
       <TabPanel index={0} value={value}>
         <DataSources />
       </TabPanel>
       <TabPanel index={1} value={value}>
         <AvailableDataSources />
+      </TabPanel>
+      <TabPanel index={2} value={value}>
+        <FetchData />
       </TabPanel>
     </Box>
   );
