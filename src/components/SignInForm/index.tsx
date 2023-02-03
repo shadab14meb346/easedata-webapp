@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -14,6 +14,7 @@ import Container from '@mui/material/Container';
 import * as ROUTES from 'src/constants/routes';
 import { useLoginMutation } from '@http/auth';
 import useAuth from '@utils/useAuth';
+import { validateEmail } from 'src/utils/validators';
 
 function Copyright(props: any) {
   return (
@@ -35,6 +36,9 @@ function Copyright(props: any) {
 
 const SignInForm = () => {
   const { login, data, error, loading } = useLoginMutation();
+  const [validationError, setValidationError] = useState({
+    emailError: '',
+  });
   const { setAuthState } = useAuth();
   useEffect(() => {
     if (!loading && !error && data?.token) {
@@ -47,10 +51,27 @@ const SignInForm = () => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+    if (!validateForm(data.get('email') as string)) return;
     await login({
       email: data.get('email') as string,
       password: data.get('password') as string,
     });
+  };
+  const validateForm = (email: string) => {
+    let valid = true;
+    let validateResult = validateEmail(email);
+    if (!validateResult.valid) {
+      valid = false;
+      //TODO:define proper type
+      setValidationError((preState: any) => {
+        return { ...preState, emailError: validateResult.message };
+      });
+    } else {
+      setValidationError((preState: any) => {
+        return { ...preState, emailError: '' };
+      });
+    }
+    return valid;
   };
 
   return (
@@ -79,6 +100,8 @@ const SignInForm = () => {
             name="email"
             autoComplete="email"
             autoFocus
+            error={!!validationError.emailError}
+            helperText={validationError.emailError}
           />
           <TextField
             margin="normal"
@@ -89,6 +112,8 @@ const SignInForm = () => {
             type="password"
             id="password"
             autoComplete="current-password"
+            error={!!error}
+            helperText={error}
           />
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
