@@ -8,9 +8,19 @@ export const useStyles = makeStyles({
     alignItems: 'center',
     flexDirection: 'column',
     marginTop: theme.spacing(1),
+    '& table': {
+      border: '2px solid forestgreen',
+      width: '800px',
+      height: '200px',
+    },
+    '& tr': {
+      borderBottom: '1px solid black',
+    },
+    '& td': {
+      textAlign: 'center',
+    },
   },
-  container: {
-    display: 'flex',
-    flexWrap: 'wrap',
+  select: {
+    width: '100%',
   },
 });

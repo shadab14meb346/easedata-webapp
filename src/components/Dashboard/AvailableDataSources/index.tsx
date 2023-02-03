@@ -1,4 +1,4 @@
-import { Box, CircularProgress } from '@mui/material';
+import { Box, CircularProgress, Container } from '@mui/material';
 
 import { useStyles } from './useStyles';
 import ConnectionCard from './ConnectionCard';
@@ -9,7 +9,7 @@ const AvailableDataSources = () => {
   const classes = useStyles();
   return (
     <div className={classes.main}>
-      <Box marginTop={1} display="flex">
+      <Container className={classes.container}>
         {loading ? (
           <CircularProgress />
         ) : (
@@ -22,7 +22,7 @@ const AvailableDataSources = () => {
             ))}
           </>
         )}
-      </Box>
+      </Container>
     </div>
   );
 };

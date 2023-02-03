@@ -11,7 +11,7 @@ interface IConnectionCardProp {
 const ConnectionCard = ({ type, createdAt }: IConnectionCardProp) => {
   const classes = useStyles();
   return (
-    <Box sx={{ minWidth: 275 }}>
+    <Box className={classes.main}>
       <Card variant="outlined" className={classes.card}>
         <CardContent>
           <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>

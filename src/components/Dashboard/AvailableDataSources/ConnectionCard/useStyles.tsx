@@ -3,11 +3,8 @@ import theme from 'src/style-system/theme';
 
 export const useStyles = makeStyles({
   main: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexDirection: 'column',
-    marginTop: theme.spacing(1),
+    width: '250px',
+    margin: theme.spacing(1),
   },
   card: {
     minHeight: 250,

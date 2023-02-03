@@ -16,6 +16,16 @@ const GET_MY_DATA_SOURCES_LIST_QUERY = gql`
   }
 `;
 
+const GET_HUB_SPOT_CONTACTS = gql`
+  query GetHubSpotContacts {
+    getHubSpotContacts {
+      created_at
+      first_name
+      last_name
+    }
+  }
+`;
+
 export const useMyDataSourcesListQuery = () => {
   const [data, setData] = useState<any | null>([]);
   const [error, setError] = useState<string | null>(null);
@@ -41,5 +51,31 @@ export const useMyDataSourcesListQuery = () => {
     data,
     error,
     loading,
+  };
+};
+
+export const useGetHubSpotContactsQuery = () => {
+  const [data, setData] = useState<any | null>([]);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const fetchHubSpotContacts = async () => {
+    try {
+      setLoading(true);
+      const { data } = await client.query({
+        query: GET_HUB_SPOT_CONTACTS,
+      });
+      setData(data.getHubSpotContacts);
+    } catch (e: any) {
+      setError(e.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return {
+    data,
+    error,
+    loading,
+    fetchHubSpotContacts,
   };
 };
