@@ -9,4 +9,8 @@ export const useStyles = makeStyles({
     flexDirection: 'column',
     marginTop: theme.spacing(1),
   },
+  container: {
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
 });
