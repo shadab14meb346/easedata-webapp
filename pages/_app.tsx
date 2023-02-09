@@ -6,6 +6,8 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { CacheProvider, EmotionCache } from '@emotion/react';
 import { ApolloProvider } from '@apollo/client';
 import { Router, useRouter } from 'next/router';
+import nProgress from 'nprogress';
+import 'nprogress/nprogress.css';
 
 import { AuthProvider } from '@utils/authContext';
 import { useApollo } from '@graphql/apollo';
@@ -32,7 +34,6 @@ const MyApp = (props: MyAppProps) => {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
   const apolloClient = useApollo(pageProps.initialApolloState);
   const router = useRouter();
-  const [loading, setLoading] = useState<boolean>(false);
   const [tokenBeingValidated, setTokenBeingValidated] = useState<boolean>(true);
   const [authState, setAuthState] = React.useState<IAuthState>({
     token: null,
@@ -61,17 +62,9 @@ const MyApp = (props: MyAppProps) => {
     }
   };
 
-  Router.events.on('routeChangeStart', () => {
-    setLoading(true);
-  });
-
-  Router.events.on('routeChangeComplete', () => {
-    setLoading(false);
-  });
-
-  Router.events.on('routeChangeError', () => {
-    setLoading(false);
-  });
+  Router.events.on('routeChangeStart', nProgress.start);
+  Router.events.on('routeChangeError', nProgress.done);
+  Router.events.on('routeChangeComplete', nProgress.done);
 
   /**
    * useEffect run on every route change
@@ -87,7 +80,7 @@ const MyApp = (props: MyAppProps) => {
     }
   }, [router]);
 
-  if (loading || tokenBeingValidated) return <PageLoader />;
+  if (tokenBeingValidated) return <PageLoader />;
 
   return (
     <AuthProvider

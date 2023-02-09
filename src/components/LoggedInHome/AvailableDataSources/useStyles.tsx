@@ -7,7 +7,7 @@ export const useStyles = makeStyles({
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'column',
-    marginTop: theme.spacing(4),
+    marginTop: theme.spacing(1),
   },
   container: {
     display: 'flex',

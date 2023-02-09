@@ -27,10 +27,10 @@ const TopAppBar = () => {
           sx={{ marginRight: 2 }}
           href={ROUTES.SIGN_IN}
         >
-          login
+          Log In
         </Button>
         <Button variant="contained" href={ROUTES.SIGN_UP}>
-          sign up
+          SIGN UP
         </Button>
       </Toolbar>
     </AppBar>

@@ -3,9 +3,10 @@ import theme from 'src/style-system/theme';
 
 export const useStyles = makeStyles({
   main: {
-    margin: theme.spacing(4),
+    width: '250px',
+    margin: theme.spacing(1),
   },
-  select: {
-    width: '30%',
+  card: {
+    minHeight: 250,
   },
 });

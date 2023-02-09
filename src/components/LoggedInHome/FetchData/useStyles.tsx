@@ -3,7 +3,11 @@ import theme from 'src/style-system/theme';
 
 export const useStyles = makeStyles({
   main: {
-    margin: theme.spacing(4),
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'column',
+    marginTop: theme.spacing(1),
   },
   select: {
     width: '30%',

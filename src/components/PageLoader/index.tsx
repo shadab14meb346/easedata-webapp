@@ -1,35 +1,37 @@
 import { Box } from '@mui/material';
 
-import theme from 'src/style-system/theme';
-
 import { useStyles } from './useStyles';
 
 interface IPageLoader {
-  isTransparent?: boolean;
   height?: string;
   padding?: string;
-  backGroundColor?: string;
 }
 
-const PageLoader = ({
-  isTransparent,
-  height = '100vh',
-  padding = '0px',
-  backGroundColor = theme.palette.customColor4.main,
-}: IPageLoader) => {
+const PageLoader = ({ height = '100vh', padding = '0px' }: IPageLoader) => {
   const classes = useStyles();
 
   return (
     <Box
       className={classes.mainContainer}
       sx={{
-        backgroundColor: backGroundColor,
-        opacity: isTransparent ? 0.75 : 1,
         height: height,
         padding: padding,
       }}
     >
-      <div className={classes.logo}>Logo</div>
+      <div className={classes.logo}>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="50"
+          height="50"
+          fill="none"
+          viewBox="0 0 16 16"
+        >
+          <path
+            fill="#333"
+            d="M8 2C4.692 2 2 4.692 2 8s2.692 6 6 6a6.01 6.01 0 005.917-5H12.9A4.992 4.992 0 018 13c-2.768 0-5-2.232-5-5a4.992 4.992 0 018.77-3.27L10.5 6H14V2.5l-1.523 1.523A5.978 5.978 0 008 2z"
+          ></path>
+        </svg>
+      </div>
     </Box>
   );
 };

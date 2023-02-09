@@ -3,12 +3,15 @@ import theme from 'src/style-system/theme';
 
 export const useStyles = makeStyles({
   main: {
-    marginTop: theme.spacing(2),
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'column',
+    marginTop: theme.spacing(1),
     '& table': {
-      border: '2px solid blue',
+      border: '2px solid forestgreen',
       width: '800px',
       height: '200px',
-      borderRadius: '5px',
     },
     '& tr': {
       borderBottom: '1px solid black',
@@ -18,6 +21,6 @@ export const useStyles = makeStyles({
     },
   },
   select: {
-    width: '30%',
+    width: '100%',
   },
 });
