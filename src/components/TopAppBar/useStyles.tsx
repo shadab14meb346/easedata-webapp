@@ -8,7 +8,7 @@ export const useStyles = makeStyles({
     justifyContent: 'center',
   },
   appBar: {
-    padding: theme.spacing(0, 2, 0, 2),
+    padding: theme.spacing(2),
     backgroundColor: theme.palette.background.default,
     borderBottom: '1px solid rgba(111, 111, 147, 0.8)',
     [theme.breakpoints.down('sm')]: {

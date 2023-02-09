@@ -52,36 +52,26 @@ const FetchHubSpotContacts = ({
       </Select>
       {selectedTable && (
         <Box marginTop={1}>
-          <Button
-            disabled={loading}
-            variant="outlined"
-            onClick={handleGetAllContactsClick}
-          >
-            Get All Contacts
+          <Button variant="contained" onClick={handleGetAllContactsClick}>
+            {loading ? 'Loading...' : 'Get All Contacts'}
           </Button>
-          {loading ? (
-            'data loading....'
-          ) : (
-            <>
-              {!loading && !!contacts.length && (
-                <table>
+          {!loading && !!contacts.length && (
+            <table style={{ marginTop: '8px' }}>
+              <tr>
+                <th>first_name</th>
+                <th>last_name</th>
+                <th>created_at</th>
+              </tr>
+              {contacts?.map((contact: any) => {
+                return (
                   <tr>
-                    <th>first_name</th>
-                    <th>last_name</th>
-                    <th>created_at</th>
+                    <td>{contact.first_name}</td>
+                    <td>{contact.last_name}</td>
+                    <td>{contact.created_at}</td>
                   </tr>
-                  {contacts?.map((contact: any) => {
-                    return (
-                      <tr>
-                        <td>{contact.first_name}</td>
-                        <td>{contact.last_name}</td>
-                        <td>{contact.created_at}</td>
-                      </tr>
-                    );
-                  })}
-                </table>
-              )}
-            </>
+                );
+              })}
+            </table>
           )}
         </Box>
       )}
