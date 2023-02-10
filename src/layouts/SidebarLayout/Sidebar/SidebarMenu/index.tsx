@@ -1,40 +1,11 @@
-import { useContext } from 'react';
 import { useRouter } from 'next/router';
 
-import {
-  ListSubheader,
-  alpha,
-  Box,
-  List,
-  styled,
-  Button,
-  ListItem,
-} from '@mui/material';
+import { alpha, Box, List, styled, Button, ListItem } from '@mui/material';
 import NextLink from 'next/link';
-// import { SidebarContext } from 'src/contexts/SidebarContext';
 
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import SourceIcon from '@mui/icons-material/Source';
 import CreateNewFolderIcon from '@mui/icons-material/CreateNewFolder';
-import DesignServicesTwoToneIcon from '@mui/icons-material/DesignServicesTwoTone';
-import BrightnessLowTwoToneIcon from '@mui/icons-material/BrightnessLowTwoTone';
-import MmsTwoToneIcon from '@mui/icons-material/MmsTwoTone';
-import TableChartTwoToneIcon from '@mui/icons-material/TableChartTwoTone';
-import AccountCircleTwoToneIcon from '@mui/icons-material/AccountCircleTwoTone';
-import BallotTwoToneIcon from '@mui/icons-material/BallotTwoTone';
-import BeachAccessTwoToneIcon from '@mui/icons-material/BeachAccessTwoTone';
-import EmojiEventsTwoToneIcon from '@mui/icons-material/EmojiEventsTwoTone';
-import FilterVintageTwoToneIcon from '@mui/icons-material/FilterVintageTwoTone';
-import HowToVoteTwoToneIcon from '@mui/icons-material/HowToVoteTwoTone';
-import LocalPharmacyTwoToneIcon from '@mui/icons-material/LocalPharmacyTwoTone';
-import RedeemTwoToneIcon from '@mui/icons-material/RedeemTwoTone';
-import SettingsTwoToneIcon from '@mui/icons-material/SettingsTwoTone';
-import TrafficTwoToneIcon from '@mui/icons-material/TrafficTwoTone';
-import CheckBoxTwoToneIcon from '@mui/icons-material/CheckBoxTwoTone';
-import ChromeReaderModeTwoToneIcon from '@mui/icons-material/ChromeReaderModeTwoTone';
-import WorkspacePremiumTwoToneIcon from '@mui/icons-material/WorkspacePremiumTwoTone';
-import CameraFrontTwoToneIcon from '@mui/icons-material/CameraFrontTwoTone';
-import DisplaySettingsTwoToneIcon from '@mui/icons-material/DisplaySettingsTwoTone';
 
 const MenuWrapper = styled(Box)(
   ({ theme }) => `
@@ -179,7 +150,6 @@ const SubMenuWrapper = styled(Box)(
 );
 
 function SidebarMenu() {
-  // const { closeSidebar } = useContext(SidebarContext);
   const router = useRouter();
   const currentRoute = router.pathname;
   const closeSidebar = () => {
@@ -189,26 +159,25 @@ function SidebarMenu() {
   return (
     <>
       <MenuWrapper>
-        <List component="div">
+        <List component="div" style={{ padding: 0 }}>
           <SubMenuWrapper>
-            <List component="div">
+            <List component="div" style={{ padding: 0 }}>
               <ListItem component="div">
-                <NextLink href="/dashboard/run-query" passHref>
-                  <Button
-                    className={
-                      currentRoute === '/dashboard/run-query' ? 'active' : ''
-                    }
-                    disableRipple
-                    component="a"
-                    onClick={closeSidebar}
-                    startIcon={<PlayArrowIcon fontSize="large" />}
-                  >
-                    Run Queries
-                  </Button>
-                </NextLink>
+                <Button
+                  className={
+                    currentRoute === '/dashboard/run-query' ? 'active' : ''
+                  }
+                  disableRipple
+                  component="a"
+                  startIcon={<PlayArrowIcon fontSize="large" />}
+                  onClick={() => {
+                    router.push('/dashboard/run-query');
+                  }}
+                >
+                  Run Queries
+                </Button>
               </ListItem>
               <ListItem component="div">
-                {/* <NextLink href="/dashboard/add-data-source" passHref> */}
                 <Button
                   className={
                     currentRoute === '/dashboard/add-data-source'
@@ -216,7 +185,6 @@ function SidebarMenu() {
                       : ''
                   }
                   disableRipple
-                  // component="a"
                   onClick={() => {
                     router.push('/dashboard/add-data-source');
                   }}
@@ -224,10 +192,8 @@ function SidebarMenu() {
                 >
                   Add New Data Source
                 </Button>
-                {/* </NextLink> */}
               </ListItem>
               <ListItem component="div">
-                {/* <NextLink href="/dashboard/data-sources" passHref> */}
                 <Button
                   className={
                     currentRoute === '/dashboard/data-sources' ? 'active' : ''
@@ -242,7 +208,6 @@ function SidebarMenu() {
                 >
                   Your Data Sources
                 </Button>
-                {/* </NextLink> */}
               </ListItem>
             </List>
           </SubMenuWrapper>
