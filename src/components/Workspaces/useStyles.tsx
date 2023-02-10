@@ -20,7 +20,7 @@ export const useStyles = makeStyles({
   },
   button: {
     width: '100%',
-    marginLeft: theme.spacing(3),
+    marginLeft: theme.spacing(1.5),
   },
   item: {
     display: 'flex',
