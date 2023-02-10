@@ -1,5 +1,12 @@
 import { useState, useRef } from 'react';
-import { Box, Typography, Popover, Avatar, Button } from '@mui/material';
+import {
+  Box,
+  Typography,
+  Popover,
+  Avatar,
+  Button,
+  Divider,
+} from '@mui/material';
 import DoneIcon from '@mui/icons-material/Done';
 
 import { useStyles } from './useStyles';
@@ -110,6 +117,11 @@ const Workspaces = () => {
               )}
             </Box>
           ))}
+          <Divider />
+          <Box margin={1} display="flex" flexDirection="column">
+            <Typography variant="overline">Workspace Settings</Typography>
+            <Typography variant="overline">Create Workspace</Typography>
+          </Box>
         </Box>
       </Popover>
     </>

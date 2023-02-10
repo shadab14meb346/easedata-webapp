@@ -1216,9 +1216,10 @@ export const PureLightTheme = createTheme({
       color: colors.alpha.black[70],
     },
     overline: {
-      fontSize: 13,
+      fontSize: 12,
       fontWeight: 700,
-      textTransform: 'uppercase',
+      color: colors.alpha.black[70],
+      textTransform: 'none',
     },
   },
   shadows: [

@@ -15,7 +15,7 @@ export const useStyles = makeStyles({
     padding: theme.spacing(1),
   },
   list: {
-    height: '400px',
+    minHeight: '200px',
     width: '270px',
   },
   button: {
