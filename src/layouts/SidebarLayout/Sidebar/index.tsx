@@ -1,6 +1,4 @@
-import { useContext } from 'react';
 import Scrollbar from 'src/components/Scrollbar';
-// import { SidebarContext } from 'src/contexts/SidebarContext';
 
 import {
   Box,
@@ -9,12 +7,12 @@ import {
   styled,
   Divider,
   useTheme,
-  Button,
   lighten,
   darken,
 } from '@mui/material';
 
 import SidebarMenu from './SidebarMenu';
+import Workspaces from '@components/Workspaces';
 // import Logo from 'src/components/LogoSign';
 
 const SidebarWrapper = styled(Box)(
@@ -30,8 +28,6 @@ const SidebarWrapper = styled(Box)(
 );
 
 function Sidebar() {
-  // const { sidebarToggle, toggleSidebar } = useContext(SidebarContext);
-  // const closeSidebar = () => toggleSidebar();
   const sidebarToggle = false;
   const closeSidebar = () => {};
   const theme = useTheme();
@@ -56,24 +52,7 @@ function Sidebar() {
         }}
       >
         <Scrollbar>
-          <Box mt={3}>
-            <Box
-              mx={2}
-              sx={{
-                width: 52,
-              }}
-            >
-              {/* <Logo /> */}
-              Logo
-            </Box>
-          </Box>
-          <Divider
-            sx={{
-              mt: theme.spacing(3),
-              mx: theme.spacing(2),
-              background: theme.colors.alpha.trueWhite[10],
-            }}
-          />
+          <Workspaces />
           <SidebarMenu />
         </Scrollbar>
         <Divider
