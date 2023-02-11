@@ -59,7 +59,6 @@ export const useCreateWorkspaceMutation = () => {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const createWorkspace = async (name: string) => {
-    console.log('createWorkspace', { name });
     try {
       setLoading(true);
       const { data } = await client.mutate({

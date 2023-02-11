@@ -9,12 +9,27 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { Box, Typography } from '@mui/material';
 import { useStyles } from './useStyles';
 import { useCreateWorkspaceMutation } from '@http/workspace';
+import { client } from '@graphql/index';
 
 export default function CreateWorkspace() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const [workspaceName, setWorkspaceName] = React.useState('');
-  const { loading, error, createWorkspace } = useCreateWorkspaceMutation();
+  const {
+    loading,
+    error,
+    data: createdWorkspace,
+    createWorkspace,
+  } = useCreateWorkspaceMutation();
+  React.useEffect(() => {
+    if (error) {
+      console.log(error);
+    }
+    if (createdWorkspace?.id) {
+      client.resetStore();
+      setOpen(false);
+    }
+  }, [loading, error, createdWorkspace]);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -28,7 +43,7 @@ export default function CreateWorkspace() {
     if (!workspaceName) return;
     createWorkspace(workspaceName);
   };
-
+  console.log(createdWorkspace);
   return (
     <>
       <Typography
