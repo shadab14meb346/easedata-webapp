@@ -8,6 +8,7 @@ import {
   Divider,
 } from '@mui/material';
 import DoneIcon from '@mui/icons-material/Done';
+import CircularProgress from '@mui/material/CircularProgress';
 
 import { useStyles } from './useStyles';
 import useAuth from '@utils/useAuth';
@@ -15,12 +16,17 @@ import {
   UserBoxLabel,
   UserBoxText,
 } from 'src/layouts/SidebarLayout/Header/Userbox';
+import { useMyWorkspacesListQuery } from '@http/workspace';
+import { updateWorkspaceStore, useWorkspaceStore } from '@store/workspace';
+import { WorkspaceRole, WorkspaceType } from 'types/workspace';
 
 const Workspaces = () => {
   const classes = useStyles();
   const { authState } = useAuth();
   const [open, setOpen] = useState(false);
   const ref = useRef<any>(null);
+  const { loading, data: workspaces, error } = useMyWorkspacesListQuery();
+  const { selectedWorkspace } = useWorkspaceStore();
 
   const handleOpen = (): void => {
     setOpen(true);
@@ -29,28 +35,15 @@ const Workspaces = () => {
   const handleClose = (): void => {
     setOpen(false);
   };
-  const user = {
-    name: 'Bisreseach',
-    avatar: '/static/images/avatars/1.jpg',
-  };
-  const workspaces = [
-    {
-      name: 'Bisreseach',
-      avatar: '/static/images/avatars/1.jpg',
-      active: false,
-    },
-    {
-      name: 'Company 1',
-      avatar: '/static/images/avatars/1.jpg',
-      active: false,
-    },
-    {
-      name: 'Company 2',
-      avatar: '/static/images/avatars/1.jpg',
-      active: true,
-    },
-  ];
 
+  const handleWorkspaceChange = (workspace: WorkspaceType) => {
+    updateWorkspaceStore({
+      selectedWorkspace: workspace,
+    });
+    handleClose();
+  };
+  console.log('workspaces', workspaces);
+  WorkspaceRole;
   return (
     <>
       <Button
@@ -59,20 +52,24 @@ const Workspaces = () => {
         onClick={handleOpen}
         className={classes.button}
       >
-        <Box display="flex" alignItems="center" style={{ width: '100%' }}>
-          <Avatar
-            variant="square"
-            alt={user.name}
-            src={user.avatar}
-            style={{ background: 'grey' }}
-            sx={{ width: 30, height: 30 }}
-          />
-          <Box marginLeft={1}>
-            <Typography variant="h6" color="white">
-              {user.name}
-            </Typography>
+        {loading ? (
+          <CircularProgress />
+        ) : (
+          <Box display="flex" alignItems="center" style={{ width: '100%' }}>
+            <Avatar
+              variant="square"
+              alt={selectedWorkspace?.name}
+              src={selectedWorkspace?.name}
+              style={{ background: 'grey' }}
+              sx={{ width: 30, height: 30 }}
+            />
+            <Box marginLeft={1}>
+              <Typography variant="h6" color="white">
+                {selectedWorkspace?.name}
+              </Typography>
+            </Box>
           </Box>
-        </Box>
+        )}
       </Button>
       <Popover
         anchorEl={ref.current}
@@ -99,18 +96,22 @@ const Workspaces = () => {
               {authState.user?.email}
             </Typography>
           </Box>
-          {workspaces.map((workspace) => (
-            <Box className={classes.item}>
+          {workspaces.map((workspace: WorkspaceType) => (
+            <Box
+              className={classes.item}
+              key={workspace?.id}
+              onClick={() => handleWorkspaceChange(workspace)}
+            >
               <Avatar
                 variant="square"
-                alt={workspace.name}
-                src={workspace.avatar}
+                alt={workspace?.name}
+                src={workspace?.name}
                 sx={{ width: 30, height: 30 }}
               />
               <UserBoxText>
-                <UserBoxLabel variant="body1">{workspace.name}</UserBoxLabel>
+                <UserBoxLabel variant="body1">{workspace?.name}</UserBoxLabel>
               </UserBoxText>
-              {workspace.active && (
+              {selectedWorkspace?.id === workspace?.id && (
                 <Box marginLeft={2}>
                   <DoneIcon />
                 </Box>
@@ -119,7 +120,9 @@ const Workspaces = () => {
           ))}
           <Divider />
           <Box margin={1} display="flex" flexDirection="column">
-            <Typography variant="overline">Workspace Settings</Typography>
+            {selectedWorkspace?.role !== WorkspaceRole.MEMBER && (
+              <Typography variant="overline">Workspace Settings</Typography>
+            )}
             <Typography variant="overline">Create Workspace</Typography>
           </Box>
         </Box>
