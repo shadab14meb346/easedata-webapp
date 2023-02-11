@@ -12,6 +12,16 @@ const GET_MY_WORKSPACES = gql`
     }
   }
 `;
+const CREATE_WORKSPACE_MUTATION = gql`
+  mutation CreateWorkspace($input: CreateWorkspaceInput!) {
+    createWorkspace(input: $input) {
+      id
+      name
+      role
+    }
+  }
+`;
+
 export const useMyWorkspacesListQuery = () => {
   const [data, setData] = useState<any | null>([]);
   const [error, setError] = useState<string | null>(null);
@@ -41,5 +51,37 @@ export const useMyWorkspacesListQuery = () => {
     data,
     error,
     loading,
+  };
+};
+
+export const useCreateWorkspaceMutation = () => {
+  const [data, setData] = useState<any | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const createWorkspace = async (name: string) => {
+    console.log('createWorkspace', { name });
+    try {
+      setLoading(true);
+      const { data } = await client.mutate({
+        mutation: CREATE_WORKSPACE_MUTATION,
+        variables: {
+          input: {
+            name,
+          },
+        },
+      });
+      console.log(data);
+      setData(data.createWorkspace);
+    } catch (e: any) {
+      setError(e.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+  return {
+    data,
+    error,
+    loading,
+    createWorkspace,
   };
 };

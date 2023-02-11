@@ -19,6 +19,7 @@ import {
 import { useMyWorkspacesListQuery } from '@http/workspace';
 import { updateWorkspaceStore, useWorkspaceStore } from '@store/workspace';
 import { WorkspaceRole, WorkspaceType } from 'types/workspace';
+import CreateWorkspace from './CreateWorkspace';
 
 const Workspaces = () => {
   const classes = useStyles();
@@ -42,8 +43,6 @@ const Workspaces = () => {
     });
     handleClose();
   };
-  console.log('workspaces', workspaces);
-  WorkspaceRole;
   return (
     <>
       <Button
@@ -123,7 +122,7 @@ const Workspaces = () => {
             {selectedWorkspace?.role !== WorkspaceRole.MEMBER && (
               <Typography variant="overline">Workspace Settings</Typography>
             )}
-            <Typography variant="overline">Create Workspace</Typography>
+            <CreateWorkspace />
           </Box>
         </Box>
       </Popover>
