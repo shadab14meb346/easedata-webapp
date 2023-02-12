@@ -23,6 +23,7 @@ import AccountBoxTwoToneIcon from '@mui/icons-material/AccountBoxTwoTone';
 import LockOpenTwoToneIcon from '@mui/icons-material/LockOpenTwoTone';
 import AccountTreeTwoToneIcon from '@mui/icons-material/AccountTreeTwoTone';
 import useAuth from '@utils/useAuth';
+import { client } from '@graphql/index';
 
 export const UserBoxButton = styled(Button)(
   ({ theme }) => `
@@ -63,7 +64,7 @@ function HeaderUserbox() {
   const { authState, setAuthState } = useAuth();
   const user = {
     name: authState?.user?.email,
-    avatar: '/static/images/avatars/1.jpg',
+    avatar: '/',
     jobtitle: '',
   };
 
@@ -81,6 +82,7 @@ function HeaderUserbox() {
     setAuthState({});
     localStorage.removeItem('user');
     localStorage.removeItem('jwt-token');
+    client.resetStore();
   };
 
   return (

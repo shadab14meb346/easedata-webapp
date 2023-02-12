@@ -6,6 +6,8 @@ import NextLink from 'next/link';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import SourceIcon from '@mui/icons-material/Source';
 import CreateNewFolderIcon from '@mui/icons-material/CreateNewFolder';
+import { useWorkspaceStore } from '@store/workspace';
+import { WorkspaceRole } from 'types/workspace';
 
 const MenuWrapper = styled(Box)(
   ({ theme }) => `
@@ -152,9 +154,7 @@ const SubMenuWrapper = styled(Box)(
 function SidebarMenu() {
   const router = useRouter();
   const currentRoute = router.pathname;
-  const closeSidebar = () => {
-    router.push('/');
-  };
+  const { selectedWorkspace } = useWorkspaceStore();
 
   return (
     <>
@@ -177,38 +177,42 @@ function SidebarMenu() {
                   Run Queries
                 </Button>
               </ListItem>
-              <ListItem component="div">
-                <Button
-                  className={
-                    currentRoute === '/dashboard/add-data-source'
-                      ? 'active'
-                      : ''
-                  }
-                  disableRipple
-                  onClick={() => {
-                    router.push('/dashboard/add-data-source');
-                  }}
-                  startIcon={<CreateNewFolderIcon />}
-                >
-                  Add New Data Source
-                </Button>
-              </ListItem>
-              <ListItem component="div">
-                <Button
-                  className={
-                    currentRoute === '/dashboard/data-sources' ? 'active' : ''
-                  }
-                  disableRipple
-                  // component="a"
-                  // onClick={closeSidebar}
-                  startIcon={<SourceIcon />}
-                  onClick={() => {
-                    router.push('/dashboard/data-sources');
-                  }}
-                >
-                  Your Data Sources
-                </Button>
-              </ListItem>
+              {selectedWorkspace?.role !== WorkspaceRole.MEMBER && (
+                <ListItem component="div">
+                  <Button
+                    className={
+                      currentRoute === '/dashboard/add-data-source'
+                        ? 'active'
+                        : ''
+                    }
+                    disableRipple
+                    onClick={() => {
+                      router.push('/dashboard/add-data-source');
+                    }}
+                    startIcon={<CreateNewFolderIcon />}
+                  >
+                    Add New Data Source
+                  </Button>
+                </ListItem>
+              )}
+              {selectedWorkspace?.role !== WorkspaceRole.MEMBER && (
+                <ListItem component="div">
+                  <Button
+                    className={
+                      currentRoute === '/dashboard/data-sources' ? 'active' : ''
+                    }
+                    disableRipple
+                    // component="a"
+                    // onClick={closeSidebar}
+                    startIcon={<SourceIcon />}
+                    onClick={() => {
+                      router.push('/dashboard/data-sources');
+                    }}
+                  >
+                    Your Data Sources
+                  </Button>
+                </ListItem>
+              )}
             </List>
           </SubMenuWrapper>
         </List>
