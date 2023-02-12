@@ -1,7 +1,7 @@
 import { alpha } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { colors } from 'src/style-system/PureLightTheme';
 import theme from 'src/style-system/theme';
+import { colors } from 'src/style-system/PureLightTheme';
 
 export const useStyles = makeStyles({
   main: {

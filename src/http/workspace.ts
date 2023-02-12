@@ -51,6 +51,7 @@ export const useMyWorkspacesListQuery = () => {
     data,
     error,
     loading,
+    refetch: fetchMyWorkspaces,
   };
 };
 

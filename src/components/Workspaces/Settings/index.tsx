@@ -9,16 +9,17 @@ import { Box, Typography } from '@mui/material';
 import { useStyles } from './useStyles';
 import { useCreateWorkspaceMutation } from '@http/workspace';
 import { client } from '@graphql/index';
+import { WorkspaceType } from 'types/workspace';
+import { useWorkspaceStore } from '@store/workspace';
 
-interface ICreateWorkspaceProps {
-  onSuccessfulCreate: () => void;
+interface ISettingsProps {
+  workspace: WorkspaceType;
 }
-export default function CreateWorkspace({
-  onSuccessfulCreate,
-}: ICreateWorkspaceProps) {
+export default function Settings() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const [workspaceName, setWorkspaceName] = React.useState('');
+  const { selectedWorkspace } = useWorkspaceStore();
   const {
     loading,
     error,
@@ -32,7 +33,6 @@ export default function CreateWorkspace({
     if (createdWorkspace?.id) {
       client.resetStore();
       setOpen(false);
-      onSuccessfulCreate();
     }
   }, [loading, error, createdWorkspace]);
 
@@ -55,33 +55,26 @@ export default function CreateWorkspace({
         onClick={handleClickOpen}
         className={classes.title}
       >
-        Create Workspace
+        Workspace Settings
       </Typography>
 
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Create a new workspace</DialogTitle>
+      <Dialog open={open} onClose={handleClose} fullWidth>
+        <DialogTitle>Workspace</DialogTitle>
         <DialogContent>
-          <DialogContentText>
-            Workspaces are shared spaces where teams can collaborate on queries
-            and control access to data.
-          </DialogContentText>
-          <TextField
-            autoFocus
-            margin="dense"
-            id="name"
-            label="Workspace Name"
-            type="text"
-            fullWidth
-            variant="outlined"
-            onChange={(e) => setWorkspaceName(e.target.value)}
-          />
+          <DialogContentText>Manage your workspace settings</DialogContentText>
         </DialogContent>
-        <Box display="flex" paddingLeft={3} paddingBottom={3}>
+        <DialogTitle>General</DialogTitle>
+        <DialogContent>
+          <DialogContentText>Workspace Name</DialogContentText>
+          <Typography variant="h6">{selectedWorkspace?.name}</Typography>
+        </DialogContent>
+
+        {/* <Box display="flex" paddingLeft={3} paddingBottom={3}>
           <Button onClick={handleCreateWorkspace} variant="contained">
             {loading ? 'Loading...' : 'Create Workspace'}
           </Button>
           <Button onClick={handleClose}>Cancel</Button>
-        </Box>
+        </Box> */}
       </Dialog>
     </>
   );
