@@ -20,13 +20,19 @@ import { useMyWorkspacesListQuery } from '@http/workspace';
 import { updateWorkspaceStore, useWorkspaceStore } from '@store/workspace';
 import { WorkspaceRole, WorkspaceType } from 'types/workspace';
 import CreateWorkspace from './CreateWorkspace';
+import Settings from './Settings';
 
 const Workspaces = () => {
   const classes = useStyles();
   const { authState } = useAuth();
   const [open, setOpen] = useState(false);
   const ref = useRef<any>(null);
-  const { loading, data: workspaces, error } = useMyWorkspacesListQuery();
+  const {
+    loading,
+    data: workspaces,
+    error,
+    refetch,
+  } = useMyWorkspacesListQuery();
   const { selectedWorkspace } = useWorkspaceStore();
 
   const handleOpen = (): void => {
@@ -118,11 +124,13 @@ const Workspaces = () => {
             </Box>
           ))}
           <Divider />
-          <Box margin={1} display="flex" flexDirection="column">
-            {selectedWorkspace?.role !== WorkspaceRole.MEMBER && (
-              <Typography variant="overline">Workspace Settings</Typography>
-            )}
-            <CreateWorkspace />
+          <Box display="flex" flexDirection="column">
+            {selectedWorkspace?.role !== WorkspaceRole.MEMBER && <Settings />}
+            <CreateWorkspace
+              onSuccessfulCreate={() => {
+                refetch();
+              }}
+            />
           </Box>
         </Box>
       </Popover>
