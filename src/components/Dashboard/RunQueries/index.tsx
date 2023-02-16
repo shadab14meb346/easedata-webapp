@@ -18,7 +18,7 @@ import FieldsDropdown from '@components/common/FieldsDropdown';
 import { useExecuteQuery } from '@http/query';
 import ShowData from './ShowData';
 
-const FetchData = () => {
+const RunQueries = () => {
   const classes = useStyles();
   const { selectedWorkspace } = useWorkspaceStore();
   const { data: dataSources } = useDataSourcesListQuery(
@@ -95,4 +95,4 @@ const FetchData = () => {
   );
 };
 
-export default FetchData;
+export default RunQueries;

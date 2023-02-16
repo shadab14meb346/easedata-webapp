@@ -29,7 +29,7 @@ import classNames from 'classnames';
 import { forwardRef, useEffect, useState } from 'react';
 import { useCreateQueryMutation, useExecuteQuery } from '@http/query';
 import { useWorkspaceStore } from '@store/workspace';
-import ShowData from '../FetchData/ShowData';
+import ShowData from '../RunQueries/ShowData';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
