@@ -2,10 +2,14 @@ import { Box, CircularProgress, Container } from '@mui/material';
 
 import { useStyles } from './useStyles';
 import ConnectionCard from './ConnectionCard';
-import { useMyDataSourcesListQuery } from '@http/data-source';
+import { useDataSourcesListQuery } from '@http/data-source';
+import { useWorkspaceStore } from '@store/workspace';
 
 const AvailableDataSources = () => {
-  const { data, loading, error } = useMyDataSourcesListQuery();
+  const { selectedWorkspace } = useWorkspaceStore();
+  const { data, loading, error } = useDataSourcesListQuery(
+    selectedWorkspace?.id as string
+  );
   const classes = useStyles();
   return (
     <div className={classes.main}>

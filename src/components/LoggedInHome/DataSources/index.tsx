@@ -13,7 +13,10 @@ const DataSources = () => {
       <Box marginTop={1}>
         <Button
           variant="outlined"
-          href={getHubSpotOauthURL(authState?.token as string)}
+          href={getHubSpotOauthURL({
+            jwt: authState?.token as string,
+            workspaceId: '13',
+          })}
           target="_blank"
         >
           HubSpot
