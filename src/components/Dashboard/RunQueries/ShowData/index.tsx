@@ -10,6 +10,7 @@ const ShowData = ({ data, className = '' }: IShowDataProps) => {
   const classes = useStyles();
   if (!data?.length) return null;
   const headers = Object.keys(data[0]);
+  console.log(data[0]);
   return (
     <div className={classNames(classes.main, className)}>
       <Box marginTop={1}>

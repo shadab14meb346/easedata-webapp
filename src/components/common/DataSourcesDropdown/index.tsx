@@ -28,19 +28,19 @@ const DataSourcesDropdown = ({
     selectedWorkspace?.id as string
   );
   const classes = useStyles();
-  const [selectedDataSourceId, setSelectedDataSourceId] = useState<
-    null | string
-  >(null);
+  const [selectedDataSource, setSelectedDataSource] = useState<null | any>(
+    null
+  );
   useEffect(() => {
-    if (selectedDataSourceId) {
-      onDataSourceSelect(selectedDataSourceId);
+    if (selectedDataSource) {
+      onDataSourceSelect(selectedDataSource);
     }
-  }, [selectedDataSourceId]);
+  }, [selectedDataSource]);
 
   const handleChange = (
-    event: SelectChangeEvent<typeof selectedDataSourceId>
+    event: SelectChangeEvent<typeof selectedDataSource>
   ) => {
-    setSelectedDataSourceId(event.target.value);
+    setSelectedDataSource(event.target.value);
   };
   return (
     <Box className={classNames(classes.main, className)} {...rest}>
@@ -48,13 +48,13 @@ const DataSourcesDropdown = ({
       <Select
         labelId="demo-multiple-name-label"
         id="demo-multiple-name"
-        value={selectedDataSourceId}
+        value={selectedDataSource}
         onChange={handleChange}
         input={<OutlinedInput label="Name" />}
         className={classes.select}
       >
         {dataSources?.map((dataSource: any) => (
-          <MenuItem key={dataSource.id} value={dataSource.id}>
+          <MenuItem key={dataSource.id} value={dataSource}>
             {dataSource.type}
           </MenuItem>
         ))}

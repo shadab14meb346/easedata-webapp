@@ -8,10 +8,12 @@ const GET_DATA_SOURCES_LIST_QUERY = gql`
     getListOfDataSources(workspaceId: $workspaceId) {
       id
       type
-      access_token
-      refresh_token
       created_at
       updated_at
+      tables {
+        label
+        name
+      }
     }
   }
 `;
@@ -25,7 +27,14 @@ const GET_HUB_SPOT_CONTACTS = gql`
     }
   }
 `;
-
+const GET_DATA_SOURCE_TABLE_FIELDS = gql`
+  query GetDataSourceTableFields($input: GetDataSourceTableFieldsInput!) {
+    getDataSourceTableFields(input: $input) {
+      name
+      label
+    }
+  }
+`;
 export const useDataSourcesListQuery = (workspaceId: string) => {
   const [data, setData] = useState<any | null>([]);
   const [error, setError] = useState<string | null>(null);
@@ -82,5 +91,42 @@ export const useGetHubSpotContactsQuery = () => {
     error,
     loading,
     fetchHubSpotContacts,
+  };
+};
+
+type GetDataSourceTableFieldsInput = {
+  data_source_id: string;
+  table_name: string;
+};
+
+export const useDataSourceTableFieldsQuery = () => {
+  const [data, setData] = useState<any | null>([]);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  const fetchDataSourceTableFields = async (
+    input: GetDataSourceTableFieldsInput
+  ) => {
+    try {
+      setLoading(true);
+      const { data } = await client.query({
+        query: GET_DATA_SOURCE_TABLE_FIELDS,
+        variables: {
+          input,
+        },
+      });
+      setData(data.getDataSourceTableFields);
+    } catch (e: any) {
+      setError(e.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return {
+    data,
+    error,
+    loading,
+    fetchDataSourceTableFields,
   };
 };

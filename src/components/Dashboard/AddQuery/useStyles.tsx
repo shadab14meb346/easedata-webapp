@@ -30,4 +30,7 @@ export const useStyles = makeStyles({
   showData: {
     marginLeft: 0,
   },
+  fieldSelect: {
+    maxHeight: '400px',
+  },
 });
