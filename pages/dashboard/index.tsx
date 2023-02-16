@@ -2,7 +2,6 @@ import Head from 'next/head';
 
 import WithAuth from '@utils/withAuth';
 import SidebarLayout from 'src/layouts/SidebarLayout';
-import LoggedInHome from '@components/LoggedInHome';
 
 const DashboardPage = () => {
   return (
@@ -10,7 +9,6 @@ const DashboardPage = () => {
       <Head>
         <title>Dashboard</title>
       </Head>
-      <LoggedInHome />
     </>
   );
 };
