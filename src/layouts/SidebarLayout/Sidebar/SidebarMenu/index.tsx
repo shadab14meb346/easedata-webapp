@@ -213,6 +213,24 @@ function SidebarMenu() {
                   </Button>
                 </ListItem>
               )}
+              {selectedWorkspace?.role !== WorkspaceRole.MEMBER && (
+                <ListItem component="div">
+                  <Button
+                    className={
+                      currentRoute === '/dashboard/add-query' ? 'active' : ''
+                    }
+                    disableRipple
+                    // component="a"
+                    // onClick={closeSidebar}
+                    startIcon={<SourceIcon />}
+                    onClick={() => {
+                      router.push('/dashboard/add-query');
+                    }}
+                  >
+                    Add New Query
+                  </Button>
+                </ListItem>
+              )}
             </List>
           </SubMenuWrapper>
         </List>

@@ -3,8 +3,7 @@ import theme from 'src/style-system/theme';
 
 export const useStyles = makeStyles({
   main: {
-    margin: theme.spacing(4),
-    display: 'flex',
+    minWidth: '200px',
   },
   select: {
     width: '100%',
