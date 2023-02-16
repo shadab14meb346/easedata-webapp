@@ -106,7 +106,7 @@ const AddQuery = () => {
       name: queryName,
       fields: selectedFields,
       data_source_id: Number(selectedDataSource?.id),
-      table_name: 'contacts',
+      table_name: selectedTable as string,
       workspace_id: Number(selectedWorkspace?.id),
       description: '',
     });
