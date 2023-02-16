@@ -40,10 +40,6 @@ const MenuProps = {
     },
   },
 };
-type SelectedFields = {
-  name: string;
-  value: string;
-};
 const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
   ref
@@ -60,7 +56,6 @@ const AddQuery = () => {
   const [showAlert, setShowAlert] = useState<boolean>(false);
   const { loading, error, data, createQuery } = useCreateQueryMutation();
   useEffect(() => {
-    console.log({ loading, data, error });
     if (data?.id && !error) {
       setShowAlert(true);
     }
@@ -84,13 +79,14 @@ const AddQuery = () => {
       description: '',
     });
   };
-
+  //TODO:Make this dynamic
   const tablesOptions = [
     {
       label: 'Contacts',
       id: 'contacts',
     },
   ];
+  //TODO:Make this dynamic
   const fields = [
     {
       name: 'First Name',
@@ -192,9 +188,6 @@ const AddQuery = () => {
               {loading ? 'Creating...' : 'Create Query'}
             </Typography>
           </Button>
-          {/* <Button variant="contained" sx={{ marginLeft: 2 }}>
-          <Typography variant="h6">Execute Query</Typography>
-        </Button> */}
         </Box>
       </div>
     </>

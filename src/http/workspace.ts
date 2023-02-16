@@ -21,6 +21,17 @@ const CREATE_WORKSPACE_MUTATION = gql`
     }
   }
 `;
+const LIST_ALL_DATA_QUERIES_OF_A_WORKSPACE = gql`
+  query ListAllDataQueriesOfAWorkspace($workspaceId: ID!) {
+    listAllDataQueriesOfAWorkspace(workspaceId: $workspaceId) {
+      id
+      name
+      data_source_id
+      table_name
+      fields
+    }
+  }
+`;
 
 export const useMyWorkspacesListQuery = () => {
   const [data, setData] = useState<any | null>([]);
@@ -83,5 +94,38 @@ export const useCreateWorkspaceMutation = () => {
     error,
     loading,
     createWorkspace,
+  };
+};
+
+export const useDataQueriesOfAWorkspace = (workspaceId: string) => {
+  const [data, setData] = useState<any | null>([]);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const fetchDataQueries = async () => {
+    try {
+      setLoading(true);
+      const { data } = await client.query({
+        query: LIST_ALL_DATA_QUERIES_OF_A_WORKSPACE,
+        variables: {
+          workspaceId,
+        },
+      });
+      setData(data.listAllDataQueriesOfAWorkspace);
+    } catch (e: any) {
+      setError(e.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
+    if (workspaceId) {
+      fetchDataQueries();
+    }
+  }, [workspaceId]);
+
+  return {
+    data,
+    error,
+    loading,
   };
 };
