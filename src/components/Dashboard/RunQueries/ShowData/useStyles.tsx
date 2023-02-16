@@ -1,12 +1,10 @@
 import { makeStyles } from '@mui/styles';
-import theme from 'src/style-system/theme';
 
 export const useStyles = makeStyles({
   main: {
-    marginTop: theme.spacing(2),
     '& table': {
       border: '2px solid blue',
-      width: '800px',
+      width: '400px',
       height: '200px',
       borderRadius: '5px',
     },
@@ -16,8 +14,5 @@ export const useStyles = makeStyles({
     '& td': {
       textAlign: 'center',
     },
-  },
-  select: {
-    width: '30%',
   },
 });

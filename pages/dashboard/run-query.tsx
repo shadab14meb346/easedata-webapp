@@ -2,7 +2,7 @@ import Head from 'next/head';
 
 import WithAuth from '@utils/withAuth';
 import SidebarLayout from 'src/layouts/SidebarLayout';
-import FetchData from '@components/Dashboard/FetchData';
+import RunQueries from '@components/Dashboard/RunQueries';
 
 const RunQuery = () => {
   return (
@@ -10,7 +10,7 @@ const RunQuery = () => {
       <Head>
         <title>Dashboard</title>
       </Head>
-      <FetchData />
+      <RunQueries />
     </>
   );
 };

@@ -23,8 +23,9 @@ const MenuProps = {
 
 interface IFieldsDrownProps {
   fields: any[];
+  onFieldsChange: (fields: string[]) => void;
 }
-const FieldsDropdown = ({ fields }: IFieldsDrownProps) => {
+const FieldsDropdown = ({ fields, onFieldsChange }: IFieldsDrownProps) => {
   const classes = useStyles();
   const [selectedFields, setSelectedFields] = useState<string[]>([]);
   const handleChange = (event: any) => {
@@ -33,6 +34,7 @@ const FieldsDropdown = ({ fields }: IFieldsDrownProps) => {
     } = event;
     const selectedFiendsName = value.map((value: any) => value?.name ?? value);
     setSelectedFields(selectedFiendsName);
+    onFieldsChange(selectedFiendsName);
   };
   return (
     <Box className={classes.item}>

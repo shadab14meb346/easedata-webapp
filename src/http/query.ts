@@ -17,6 +17,13 @@ const CREATE_QUERY_MUTATION = gql`
     }
   }
 `;
+const EXECUTE_QUERY = gql`
+  query ExecuteQuery($input: ExecuteQueryInput!) {
+    executeQuery(input: $input) {
+      data
+    }
+  }
+`;
 type CreateQueryInput = {
   data_source_id: number;
   description?: string;
@@ -47,6 +54,39 @@ export const useCreateQueryMutation = () => {
   };
   return {
     createQuery,
+    loading,
+    error,
+    data,
+  };
+};
+
+type ExecuteQueryInput = {
+  data_source_id: number;
+  fields: string[];
+  table_name: string;
+};
+export const useExecuteQuery = () => {
+  const [data, setData] = useState<any | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const executeQuery = async (input: ExecuteQueryInput) => {
+    try {
+      setLoading(true);
+      const { data } = await client.query({
+        query: EXECUTE_QUERY,
+        variables: {
+          input,
+        },
+      });
+      setData(data.executeQuery.data);
+    } catch (e: any) {
+      setError(e.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+  return {
+    executeQuery,
     loading,
     error,
     data,

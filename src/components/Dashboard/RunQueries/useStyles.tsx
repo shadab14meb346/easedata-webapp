@@ -13,4 +13,7 @@ export const useStyles = makeStyles({
     minWidth: '200px',
     marginRight: theme.spacing(2),
   },
+  showData: {
+    marginLeft: theme.spacing(4),
+  },
 });

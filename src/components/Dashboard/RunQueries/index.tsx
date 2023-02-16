@@ -15,8 +15,10 @@ import { useDataSourcesListQuery } from '@http/data-source';
 import { useWorkspaceStore } from '@store/workspace';
 import ListOfQueriesDropdown from './ListOfQueriesDropdown';
 import FieldsDropdown from '@components/common/FieldsDropdown';
+import { useExecuteQuery } from '@http/query';
+import ShowData from './ShowData';
 
-const FetchData = () => {
+const RunQueries = () => {
   const classes = useStyles();
   const { selectedWorkspace } = useWorkspaceStore();
   const { data: dataSources } = useDataSourcesListQuery(
@@ -26,6 +28,9 @@ const FetchData = () => {
     null | string
   >(null);
   const [selectedQuery, setSelectedQuery] = useState<null | any>(null);
+  const [selectedFields, setSelectedFields] = useState<string[]>([]);
+
+  const { loading, data, executeQuery, error } = useExecuteQuery();
 
   const handleChange = (
     event: SelectChangeEvent<typeof selectedDataSourceId>
@@ -33,8 +38,14 @@ const FetchData = () => {
     setSelectedDataSourceId(event.target.value);
   };
 
-  const handleRunQuery = () => {};
-  const loading = false;
+  const handleRunQuery = () => {
+    if (!selectedQuery) return;
+    executeQuery({
+      data_source_id: selectedQuery.data_source_id,
+      fields: selectedFields,
+      table_name: selectedQuery.table_name,
+    });
+  };
   return (
     <>
       <div className={classes.main}>
@@ -69,17 +80,19 @@ const FetchData = () => {
               value: field,
             };
           })}
+          onFieldsChange={setSelectedFields}
         />
       </div>
       <Box ml={4}>
-        <Button variant="contained">
-          <Typography variant="h6" onClick={handleRunQuery}>
+        <Button variant="contained" onClick={handleRunQuery}>
+          <Typography variant="h6">
             {loading ? 'Fetching Data...' : 'Run Query'}
           </Typography>
         </Button>
       </Box>
+      <ShowData data={data} className={classes.showData} />
     </>
   );
 };
 
-export default FetchData;
+export default RunQueries;

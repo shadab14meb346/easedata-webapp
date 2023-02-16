@@ -16,7 +16,7 @@ import { useWorkspaceStore } from '@store/workspace';
 
 interface DataSourcesDropdownProps extends BoxProps {
   className?: string;
-  onDataSourceSelect: (value?: string) => void;
+  onDataSourceSelect: (value: string) => void;
 }
 const DataSourcesDropdown = ({
   className = '',
