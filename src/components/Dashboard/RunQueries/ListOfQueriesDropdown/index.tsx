@@ -48,31 +48,6 @@ const ListOfQueriesDropdown = ({
           </MenuItem>
         ))}
       </Select>
-      {/* {selectedQuery && (
-        <Box marginTop={1}>
-          <Button variant="contained" onClick={handleGetAllContactsClick}>
-            {loading ? 'Loading...' : 'Fetch Data'}
-          </Button>
-          {!loading && !!contacts.length && (
-            <table style={{ marginTop: '8px' }}>
-              <tr>
-                <th>first_name</th>
-                <th>last_name</th>
-                <th>created_at</th>
-              </tr>
-              {contacts?.map((contact: any) => {
-                return (
-                  <tr>
-                    <td>{contact.first_name}</td>
-                    <td>{contact.last_name}</td>
-                    <td>{contact.created_at}</td>
-                  </tr>
-                );
-              })}
-            </table>
-          )}
-        </Box>
-      )} */}
     </div>
   );
 };

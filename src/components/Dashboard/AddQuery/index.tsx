@@ -12,9 +12,6 @@ import {
   Checkbox,
   ListItemText,
   Button,
-  styled,
-  InputBase,
-  alpha,
   Snackbar,
   AlertTitle,
 } from '@mui/material';
@@ -22,22 +19,19 @@ import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import Portal from '@mui/base/Portal';
 
 import { useStyles } from './useStyles';
-import useAuth from '@utils/useAuth';
-import AvailableDataSources from '../AvailableDataSources';
 import DataSourcesDropdown from '@components/common/DataSourcesDropdown';
-import classNames from 'classnames';
 import { forwardRef, useEffect, useState } from 'react';
 import { useCreateQueryMutation, useExecuteQuery } from '@http/query';
 import { useWorkspaceStore } from '@store/workspace';
 import ShowData from '../RunQueries/ShowData';
+import { useDataSourceTableFieldsQuery } from '@http/data-source';
+import classNames from 'classnames';
 
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
 const MenuProps = {
   PaperProps: {
     style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
+      maxHeight: '500px',
+      maxWidth: '250px',
     },
   },
 };
@@ -53,7 +47,9 @@ const AddQuery = () => {
   const { selectedWorkspace } = useWorkspaceStore();
   const [selectedFields, setSelectedFields] = useState<string[]>([]);
   const [queryName, setQueryName] = useState<string>('');
-  const [selectedDataSourceId, setSelectedDataSourceId] = useState<string>('');
+  const [selectedDataSource, setSelectedDataSource] = useState<null | any>(
+    null
+  );
   const [showAlert, setShowAlert] = useState<boolean>(false);
   const [selectedTable, setSelectedTable] = useState<string | null>('');
   const { loading, error, data, createQuery } = useCreateQueryMutation();
@@ -63,15 +59,12 @@ const AddQuery = () => {
     executeQuery,
     error: executeQueryError,
   } = useExecuteQuery();
-
-  const handleExecuteQuery = () => {
-    if (!selectedDataSourceId || !selectedTable) return;
-    executeQuery({
-      data_source_id: Number(selectedDataSourceId),
-      fields: selectedFields,
-      table_name: selectedTable,
-    });
-  };
+  const {
+    loading: fieldsLoading,
+    error: errorInFieldsLoading,
+    data: fields,
+    fetchDataSourceTableFields,
+  } = useDataSourceTableFieldsQuery();
 
   useEffect(() => {
     if (data?.id && !error) {
@@ -79,8 +72,27 @@ const AddQuery = () => {
     }
   }, [loading, data, error]);
 
-  const handleDataSourceSelect = (value: string) => {
-    setSelectedDataSourceId(value as string);
+  useEffect(() => {
+    setSelectedFields([]);
+    if (selectedDataSource && selectedTable) {
+      fetchDataSourceTableFields({
+        data_source_id: selectedDataSource?.id,
+        table_name: selectedTable,
+      });
+    }
+  }, [selectedDataSource, selectedTable]);
+
+  const handleExecuteQuery = () => {
+    if (!selectedDataSource || !selectedTable) return;
+    executeQuery({
+      data_source_id: Number(selectedDataSource?.id),
+      fields: selectedFields,
+      table_name: selectedTable,
+    });
+  };
+
+  const handleDataSourceSelect = (selectedDataSource: any) => {
+    setSelectedDataSource(selectedDataSource);
   };
   const handleChange = (event: any) => {
     const {
@@ -93,38 +105,12 @@ const AddQuery = () => {
     createQuery({
       name: queryName,
       fields: selectedFields,
-      data_source_id: Number(selectedDataSourceId),
-      table_name: 'contacts',
+      data_source_id: Number(selectedDataSource?.id),
+      table_name: selectedTable as string,
       workspace_id: Number(selectedWorkspace?.id),
       description: '',
     });
   };
-  //TODO:Make this dynamic
-  const tablesOptions = [
-    {
-      label: 'Contacts',
-      id: 'contacts',
-    },
-    {
-      label: 'Companies',
-      id: 'companies',
-    },
-  ];
-  //TODO:Make this dynamic
-  const fields = [
-    {
-      name: 'First Name',
-      value: 'firstname',
-    },
-    {
-      name: 'Last Name',
-      value: 'lastname',
-    },
-    {
-      name: 'Created At',
-      value: 'createdate',
-    },
-  ];
   return (
     <>
       <Portal>
@@ -174,20 +160,21 @@ const AddQuery = () => {
                 setSelectedTable(e.target.value as string)
               }
             >
-              {tablesOptions?.map((table: any) => (
-                <MenuItem key={table.id} value={table.id}>
+              {selectedDataSource?.tables?.map((table: any) => (
+                <MenuItem key={table.name} value={table.name}>
                   {table.label}
                 </MenuItem>
               ))}
             </Select>
           </Box>
-          <Box className={classes.item}>
+          <FormControl sx={{ width: 300 }} className={classes.item}>
             <InputLabel id="table-options">Fields</InputLabel>
             <Select
-              className={classes.item}
+              className={classNames(classes.item, classes.fieldSelect)}
               labelId="table-options"
               id="demo-multiple-checkbox"
               multiple
+              maxRows={1}
               value={selectedFields}
               onChange={handleChange}
               input={<OutlinedInput label="Tag" />}
@@ -198,16 +185,14 @@ const AddQuery = () => {
               }}
               MenuProps={MenuProps}
             >
-              {fields.map((field) => (
-                <MenuItem key={field.value} value={field.value}>
-                  <Checkbox
-                    checked={selectedFields.indexOf(field.value) > -1}
-                  />
-                  <ListItemText primary={field.name} />
+              {fields?.map((field: any) => (
+                <MenuItem key={field.name} value={field.name}>
+                  <Checkbox checked={selectedFields.indexOf(field.name) > -1} />
+                  <ListItemText primary={field.label} />
                 </MenuItem>
               ))}
             </Select>
-          </Box>
+          </FormControl>
         </Box>
         <Box mt={4} display="flex">
           <Button variant="contained">
