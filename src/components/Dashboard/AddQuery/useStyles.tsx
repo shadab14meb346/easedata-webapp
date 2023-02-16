@@ -27,4 +27,7 @@ export const useStyles = makeStyles({
     color: '#223354',
     opacity: 0.7,
   },
+  showData: {
+    marginLeft: 0,
+  },
 });

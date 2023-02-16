@@ -27,8 +27,9 @@ import AvailableDataSources from '../AvailableDataSources';
 import DataSourcesDropdown from '@components/common/DataSourcesDropdown';
 import classNames from 'classnames';
 import { forwardRef, useEffect, useState } from 'react';
-import { useCreateQueryMutation } from '@http/query';
+import { useCreateQueryMutation, useExecuteQuery } from '@http/query';
 import { useWorkspaceStore } from '@store/workspace';
+import ShowData from '../FetchData/ShowData';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -49,19 +50,38 @@ const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(
 
 const AddQuery = () => {
   const classes = useStyles();
-  const { authState } = useAuth();
   const { selectedWorkspace } = useWorkspaceStore();
   const [selectedFields, setSelectedFields] = useState<string[]>([]);
   const [queryName, setQueryName] = useState<string>('');
+  const [selectedDataSourceId, setSelectedDataSourceId] = useState<string>('');
   const [showAlert, setShowAlert] = useState<boolean>(false);
+  const [selectedTable, setSelectedTable] = useState<string | null>('');
   const { loading, error, data, createQuery } = useCreateQueryMutation();
+  const {
+    loading: queryExecuting,
+    data: queryData,
+    executeQuery,
+    error: executeQueryError,
+  } = useExecuteQuery();
+
+  const handleExecuteQuery = () => {
+    if (!selectedDataSourceId || !selectedTable) return;
+    executeQuery({
+      data_source_id: Number(selectedDataSourceId),
+      fields: selectedFields,
+      table_name: selectedTable,
+    });
+  };
+
   useEffect(() => {
     if (data?.id && !error) {
       setShowAlert(true);
     }
   }, [loading, data, error]);
 
-  const handleDataSourceSelect = (value?: string) => {};
+  const handleDataSourceSelect = (value: string) => {
+    setSelectedDataSourceId(value as string);
+  };
   const handleChange = (event: any) => {
     const {
       target: { value },
@@ -73,7 +93,7 @@ const AddQuery = () => {
     createQuery({
       name: queryName,
       fields: selectedFields,
-      data_source_id: 1,
+      data_source_id: Number(selectedDataSourceId),
       table_name: 'contacts',
       workspace_id: Number(selectedWorkspace?.id),
       description: '',
@@ -84,6 +104,10 @@ const AddQuery = () => {
     {
       label: 'Contacts',
       id: 'contacts',
+    },
+    {
+      label: 'Companies',
+      id: 'companies',
     },
   ];
   //TODO:Make this dynamic
@@ -146,6 +170,9 @@ const AddQuery = () => {
               id="table-options"
               input={<OutlinedInput label="Name" />}
               className={classes.select}
+              onChange={(e: SelectChangeEvent) =>
+                setSelectedTable(e.target.value as string)
+              }
             >
               {tablesOptions?.map((table: any) => (
                 <MenuItem key={table.id} value={table.id}>
@@ -188,7 +215,17 @@ const AddQuery = () => {
               {loading ? 'Creating...' : 'Create Query'}
             </Typography>
           </Button>
+          <Button
+            variant="outlined"
+            onClick={handleExecuteQuery}
+            sx={{ ml: 2 }}
+          >
+            <Typography variant="h6" onClick={handleExecuteQuery}>
+              {queryExecuting ? 'Fetching...' : 'Execute Query'}
+            </Typography>
+          </Button>
         </Box>
+        <ShowData data={queryData} className={classes.showData} />
       </div>
     </>
   );
