@@ -3,9 +3,9 @@ import { useState, useEffect } from 'react';
 
 import { client } from '@graphql/index';
 
-const GET_MY_DATA_SOURCES_LIST_QUERY = gql`
-  query GetMyDataSourcesList {
-    getMyDataSourcesList {
+const GET_DATA_SOURCES_LIST_QUERY = gql`
+  query GetMyDataSourcesList($workspaceId: ID!) {
+    getListOfDataSources(workspaceId: $workspaceId) {
       id
       type
       access_token
@@ -26,7 +26,7 @@ const GET_HUB_SPOT_CONTACTS = gql`
   }
 `;
 
-export const useMyDataSourcesListQuery = () => {
+export const useDataSourcesListQuery = (workspaceId: string) => {
   const [data, setData] = useState<any | null>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -34,9 +34,12 @@ export const useMyDataSourcesListQuery = () => {
     try {
       setLoading(true);
       const { data } = await client.query({
-        query: GET_MY_DATA_SOURCES_LIST_QUERY,
+        query: GET_DATA_SOURCES_LIST_QUERY,
+        variables: {
+          workspaceId,
+        },
       });
-      setData(data.getMyDataSourcesList);
+      setData(data.getListOfDataSources);
     } catch (e: any) {
       setError(e.message);
     } finally {
@@ -44,8 +47,10 @@ export const useMyDataSourcesListQuery = () => {
     }
   };
   useEffect(() => {
-    fetchDataSources();
-  }, []);
+    if (workspaceId) {
+      fetchDataSources();
+    }
+  }, [workspaceId]);
 
   return {
     data,

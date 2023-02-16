@@ -8,10 +8,14 @@ import {
 } from '@mui/material';
 
 import { useStyles } from './useStyles';
-import { useMyDataSourcesListQuery } from '@http/data-source';
+import { useDataSourcesListQuery } from '@http/data-source';
 import FetchHubSpotContacts from './FetchHubSpotContacts';
+import { useWorkspaceStore } from '@store/workspace';
 const FetchData = () => {
-  const { data: dataSources } = useMyDataSourcesListQuery();
+  const { selectedWorkspace } = useWorkspaceStore();
+  const { data: dataSources } = useDataSourcesListQuery(
+    selectedWorkspace?.id as string
+  );
   const classes = useStyles();
   const [selectedDataSourceId, setSelectedDataSourceId] = useState<
     null | string

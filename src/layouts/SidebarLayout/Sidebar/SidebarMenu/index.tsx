@@ -209,7 +209,7 @@ function SidebarMenu() {
                       router.push('/dashboard/data-sources');
                     }}
                   >
-                    Your Data Sources
+                    Data Sources
                   </Button>
                 </ListItem>
               )}
