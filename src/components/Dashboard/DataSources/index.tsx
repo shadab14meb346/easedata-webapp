@@ -3,10 +3,12 @@ import { Button, Box, Typography } from '@mui/material';
 import { useStyles } from './useStyles';
 import useAuth from '@utils/useAuth';
 import { getHubSpotOauthURL } from 'src/utils';
+import { useWorkspaceStore } from '@store/workspace';
 
 const DataSources = () => {
   const classes = useStyles();
   const { authState } = useAuth();
+  const { selectedWorkspace } = useWorkspaceStore();
   return (
     <div className={classes.main}>
       <Typography variant="body1">Import Data From</Typography>
@@ -15,7 +17,7 @@ const DataSources = () => {
           variant="outlined"
           href={getHubSpotOauthURL({
             jwt: authState?.token as string,
-            workspaceId: '13',
+            workspaceId: selectedWorkspace?.id as string,
           })}
           target="_blank"
         >
