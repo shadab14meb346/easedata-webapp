@@ -24,6 +24,7 @@ import LockOpenTwoToneIcon from '@mui/icons-material/LockOpenTwoTone';
 import AccountTreeTwoToneIcon from '@mui/icons-material/AccountTreeTwoTone';
 import useAuth from '@utils/useAuth';
 import { client } from '@graphql/index';
+import { Router, useRouter } from 'next/router';
 
 export const UserBoxButton = styled(Button)(
   ({ theme }) => `
@@ -62,6 +63,7 @@ export const UserBoxDescription = styled(Typography)(
 
 function HeaderUserbox() {
   const { authState, setAuthState } = useAuth();
+  const router = useRouter();
   const user = {
     name: authState?.user?.email,
     avatar: '/',
@@ -83,6 +85,7 @@ function HeaderUserbox() {
     localStorage.removeItem('user');
     localStorage.removeItem('jwt-token');
     client.resetStore();
+    router.replace('/sign-in');
   };
 
   return (
