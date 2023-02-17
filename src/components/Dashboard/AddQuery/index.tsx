@@ -1,3 +1,4 @@
+import { forwardRef, useEffect, useState } from 'react';
 import {
   Box,
   Typography,
@@ -17,15 +18,16 @@ import {
 } from '@mui/material';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import Portal from '@mui/base/Portal';
+import SaveAsIcon from '@mui/icons-material/SaveAs';
+import classNames from 'classnames';
+import SlideshowIcon from '@mui/icons-material/Slideshow';
 
 import { useStyles } from './useStyles';
 import DataSourcesDropdown from '@components/common/DataSourcesDropdown';
-import { forwardRef, useEffect, useState } from 'react';
 import { useCreateQueryMutation, useExecuteQuery } from '@http/query';
 import { useWorkspaceStore } from '@store/workspace';
-import ShowData from '../RunQueries/ShowData';
 import { useDataSourceTableFieldsQuery } from '@http/data-source';
-import classNames from 'classnames';
+import ShowData from '../RunQueries/ShowData';
 
 const MenuProps = {
   PaperProps: {
@@ -195,7 +197,7 @@ const AddQuery = () => {
           </FormControl>
         </Box>
         <Box mt={4} display="flex">
-          <Button variant="contained">
+          <Button variant="contained" startIcon={<SaveAsIcon />}>
             <Typography variant="h6" onClick={handleCreateQuery}>
               {loading ? 'Creating...' : 'Create Query'}
             </Typography>
@@ -204,6 +206,7 @@ const AddQuery = () => {
             variant="outlined"
             onClick={handleExecuteQuery}
             sx={{ ml: 2 }}
+            startIcon={<SlideshowIcon />}
           >
             <Typography variant="h6" onClick={handleExecuteQuery}>
               {queryExecuting ? 'Fetching...' : 'Execute Query'}
