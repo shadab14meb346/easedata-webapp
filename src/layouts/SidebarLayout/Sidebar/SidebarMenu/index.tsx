@@ -1,10 +1,9 @@
 import { useRouter } from 'next/router';
-
-import { alpha, Box, List, styled, Button, ListItem } from '@mui/material';
-import NextLink from 'next/link';
-
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import { Box, List, styled, Button, ListItem } from '@mui/material';
+import AddBoxIcon from '@mui/icons-material/AddBox';
 import SourceIcon from '@mui/icons-material/Source';
+import SlideshowIcon from '@mui/icons-material/Slideshow';
+
 import CreateNewFolderIcon from '@mui/icons-material/CreateNewFolder';
 import { useWorkspaceStore } from '@store/workspace';
 import { WorkspaceRole } from 'types/workspace';
@@ -83,10 +82,11 @@ const SubMenuWrapper = styled(Box)(
 
           &.active,
           &:hover {
-            background-color: ${alpha(theme.colors.alpha.trueWhite[100], 0.06)};
-            color: ${theme.colors.alpha.trueWhite[100]};
-
-            .MuiButton-startIcon,
+            background-color: #f2f5f9;
+            color: #4b5563;
+            .MuiButton-startIcon {
+              color: #4b5563;
+            }
             .MuiButton-endIcon {
               color: ${theme.colors.alpha.trueWhite[100]};
             }
@@ -131,7 +131,6 @@ const SubMenuWrapper = styled(Box)(
                 height: 6px;
                 transform: scale(0);
                 transform-origin: center;
-                border-radius: 20px;
                 margin-right: ${theme.spacing(1.8)};
               }
 
@@ -169,9 +168,17 @@ function SidebarMenu() {
                   }
                   disableRipple
                   component="a"
-                  startIcon={<PlayArrowIcon fontSize="large" />}
+                  startIcon={
+                    <SlideshowIcon
+                      fontSize="large"
+                      style={{ width: '24px', height: '24px' }}
+                    />
+                  }
                   onClick={() => {
                     router.push('/dashboard/run-query');
+                  }}
+                  style={{
+                    borderRadius: 0,
                   }}
                 >
                   Run Queries
@@ -189,7 +196,14 @@ function SidebarMenu() {
                     onClick={() => {
                       router.push('/dashboard/add-data-source');
                     }}
-                    startIcon={<CreateNewFolderIcon />}
+                    startIcon={
+                      <CreateNewFolderIcon
+                        style={{ width: '24px', height: '24px' }}
+                      />
+                    }
+                    style={{
+                      borderRadius: 0,
+                    }}
                   >
                     Add New Data Source
                   </Button>
@@ -204,9 +218,14 @@ function SidebarMenu() {
                     disableRipple
                     // component="a"
                     // onClick={closeSidebar}
-                    startIcon={<SourceIcon />}
+                    startIcon={
+                      <SourceIcon style={{ width: '24px', height: '24px' }} />
+                    }
                     onClick={() => {
                       router.push('/dashboard/data-sources');
+                    }}
+                    style={{
+                      borderRadius: 0,
                     }}
                   >
                     Data Sources
@@ -222,9 +241,14 @@ function SidebarMenu() {
                     disableRipple
                     // component="a"
                     // onClick={closeSidebar}
-                    startIcon={<SourceIcon />}
+                    startIcon={
+                      <AddBoxIcon style={{ width: '24px', height: '24px' }} />
+                    }
                     onClick={() => {
                       router.push('/dashboard/add-query');
+                    }}
+                    style={{
+                      borderRadius: 0,
                     }}
                   >
                     Add New Query
