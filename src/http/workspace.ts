@@ -32,6 +32,16 @@ const LIST_ALL_DATA_QUERIES_OF_A_WORKSPACE = gql`
     }
   }
 `;
+const INVITE_USER_TO_WORKSPACE = gql`
+  mutation InviteUserToWorkspace($input: InviteUserToWorkspaceInput!) {
+    inviteUserToWorkspace(input: $input) {
+      message
+      createdAt
+      workspaceId
+      invitedRole
+    }
+  }
+`;
 
 export const useMyWorkspacesListQuery = () => {
   const [data, setData] = useState<any | null>([]);
@@ -127,5 +137,38 @@ export const useDataQueriesOfAWorkspace = (workspaceId: string) => {
     data,
     error,
     loading,
+  };
+};
+
+type InviteUserToWorkspaceInput = {
+  email: string;
+  role: string;
+  workspaceId: string;
+};
+export const useInviteUserToWorkspaceMutation = () => {
+  const [data, setData] = useState<any | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const inviteUserToWorkspace = async (input: InviteUserToWorkspaceInput) => {
+    try {
+      setLoading(true);
+      const { data } = await client.mutate({
+        mutation: INVITE_USER_TO_WORKSPACE,
+        variables: {
+          input,
+        },
+      });
+      setData(data.inviteUserToWorkspace);
+    } catch (e: any) {
+      setError(e.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+  return {
+    data,
+    error,
+    loading,
+    inviteUserToWorkspace,
   };
 };
