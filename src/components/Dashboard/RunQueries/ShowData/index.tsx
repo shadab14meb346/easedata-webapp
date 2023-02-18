@@ -1,38 +1,56 @@
-import { Box } from '@mui/material';
 import classNames from 'classnames';
 import { useStyles } from './useStyles';
-
+import CustomMaterialTable from '@components/common/CustomMaterialTable';
 interface IShowDataProps {
   data: any[];
   className?: string;
+  exportFileName: string;
 }
-const ShowData = ({ data, className = '' }: IShowDataProps) => {
-  const classes = useStyles();
+const ShowData = ({ data, className = '', exportFileName }: IShowDataProps) => {
   if (!data?.length) return null;
-  const headers = Object.keys(data[0]);
-  console.log(data[0]);
+  const classes = useStyles();
+  const getColumns = () => {
+    const headers = Object.keys(data[0]);
+    return headers?.map((header: string) => ({
+      field: header,
+      title: header,
+      width: 10 * header.length,
+    }));
+  };
+  const getRows = () => {
+    return data?.map((item: any, index: number) => {
+      return {
+        id: index,
+        ...item,
+      };
+    });
+  };
   return (
     <div className={classNames(classes.main, className)}>
-      <Box marginTop={1}>
-        <table style={{ marginTop: '8px' }}>
-          <tr>
-            {headers?.map((header: string) => (
-              <th>{header}</th>
-            ))}
-          </tr>
-          {data?.map((item: any) => {
-            return (
-              <tr>
-                {headers?.map((header: string) => (
-                  <td>{item[header]}</td>
-                ))}
-              </tr>
-            );
-          })}
-        </table>
-      </Box>
+      <CustomMaterialTable
+        columns={getColumns()}
+        data={getRows()}
+        options={{
+          exportButton: true,
+          search: false,
+          maxBodyHeight: '400px',
+          exportAllData: true,
+          exportFileName,
+          pageSize: 20,
+          headerStyle: {
+            backgroundColor: '#5569ff',
+            color: '#FFF',
+            textTransform: 'none',
+          },
+        }}
+        title=" "
+        localization={{
+          toolbar: {
+            exportTitle: 'Export Data',
+          },
+        }}
+      />
     </div>
   );
 };
-
 export default ShowData;

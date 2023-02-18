@@ -90,7 +90,11 @@ const RunQueries = () => {
           </Typography>
         </Button>
       </Box>
-      <ShowData data={data} className={classes.showData} />
+      <ShowData
+        data={data}
+        className={classes.showData}
+        exportFileName={selectedQuery?.name}
+      />
     </>
   );
 };
