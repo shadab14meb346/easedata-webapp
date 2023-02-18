@@ -213,7 +213,11 @@ const AddQuery = () => {
             </Typography>
           </Button>
         </Box>
-        <ShowData data={queryData} className={classes.showData} />
+        <ShowData
+          data={queryData}
+          className={classes.showData}
+          exportFileName={selectedTable as string}
+        />
       </div>
     </>
   );

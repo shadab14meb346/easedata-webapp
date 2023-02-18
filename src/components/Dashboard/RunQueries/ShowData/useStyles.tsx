@@ -1,18 +1,20 @@
 import { makeStyles } from '@mui/styles';
+import theme from 'src/style-system/theme';
 
 export const useStyles = makeStyles({
   main: {
-    '& table': {
-      border: '2px solid blue',
-      width: '400px',
-      height: '200px',
-      borderRadius: '5px',
+    width: '100%',
+    maxWidth: 1000,
+    overflowX: 'auto',
+    marginTop: theme.spacing(1),
+  },
+  materialTable: {
+    '& .MuiTableFooter-root': {
+      position: 'absolute',
+      bottom: 0,
     },
-    '& tr': {
-      borderBottom: '1px solid black',
-    },
-    '& td': {
-      textAlign: 'center',
+    '& .MuiPaper-root': {
+      border: '1px solid red',
     },
   },
 });
