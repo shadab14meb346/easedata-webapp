@@ -1,16 +1,12 @@
 import { MenuItem, Select } from '@mui/material';
 
 import { useStyles } from './useStyles';
-import { useState } from 'react';
-import { OperatorType, OperatorTypeLabel } from 'types/filter';
+import { SelectedOperator } from 'types/filter';
 
 interface IOperatorsProps {
-  operators: { type: OperatorType; label: OperatorTypeLabel }[];
-  onChange: (operator: {
-    type: OperatorType;
-    label: OperatorTypeLabel;
-  }) => void;
-  selected: { type: OperatorType; label: OperatorTypeLabel };
+  operators: SelectedOperator[];
+  onChange: (operator: SelectedOperator) => void;
+  selected: SelectedOperator;
   className?: string;
 }
 const Operators = ({
@@ -25,11 +21,11 @@ const Operators = ({
       <Select
         className={classes.filterOptions}
         onChange={(e) => {
-          onChange(e.target.value as any);
+          onChange(e.target.value as SelectedOperator);
         }}
         value={selected}
       >
-        {operators.map((operator) => (
+        {operators.map((operator: SelectedOperator) => (
           // @ts-ignore
           <MenuItem value={operator}>{operator.label}</MenuItem>
         ))}

@@ -1,33 +1,27 @@
-import {
-  Box,
-  Button,
-  MenuItem,
-  Popover,
-  Select,
-  TextField,
-  Typography,
-} from '@mui/material';
-import FilterListIcon from '@mui/icons-material/FilterList';
+import { Box, TextField, Typography } from '@mui/material';
 
-import { useState } from 'react';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 import { useStyles } from './useStyles';
-import { Filed, operators } from '.';
-import { OperatorType, OperatorTypeLabel } from 'types/filter';
 import Operators from './Operators';
+import {
+  FilterType,
+  operators,
+  OperatorType,
+  OperatorTypeLabel,
+} from 'types/filter';
 
 interface IFilterProps {
-  field: Filed;
-  value: string;
-  operator: OperatorType;
+  filter: FilterType;
   handleDeleteFilter: () => void;
+  handleFilterOperatorChange: (filterName: string, newOperator: any) => void;
+  handleFilterValueChange: (filterName: string, newValue: string) => void;
 }
 const Filter = ({
-  field,
-  value,
-  operator,
+  filter,
   handleDeleteFilter,
+  handleFilterOperatorChange,
+  handleFilterValueChange,
 }: IFilterProps) => {
   const classes = useStyles();
   return (
@@ -38,20 +32,28 @@ const Filter = ({
         onClick={handleDeleteFilter}
       />
       <Typography variant="body2" className={classes.fieldTitle}>
-        {field.label}
+        {filter.field.label}
       </Typography>
       <Box display="flex" mt={0.5}>
         <Operators
           className={classes.filterOperator}
           operators={operators}
-          onChange={(operator: any) => {
-            //TODO: handle change
+          onChange={(newOperator: {
+            type: OperatorType;
+            label: OperatorTypeLabel;
+          }) => {
+            handleFilterOperatorChange(filter.field.name, newOperator);
           }}
-          // @ts-ignore
-          selected={operator}
+          selected={filter.operator}
         />
         {/* //TODO:handle the value change here */}
-        <TextField className={classes.input} value={value} />
+        <TextField
+          className={classes.input}
+          value={filter.value}
+          onChange={(e) =>
+            handleFilterValueChange(filter.field.name, e.target.value)
+          }
+        />
       </Box>
     </div>
   );
