@@ -115,6 +115,7 @@ const AddQuery = () => {
   };
   return (
     <>
+      {/* //TODO: Move the snackbar to a global component */}
       <Portal>
         <Snackbar
           open={showAlert}
@@ -162,6 +163,7 @@ const AddQuery = () => {
                 setSelectedTable(e.target.value as string)
               }
             >
+              {!selectedDataSource && <MenuItem>Select A Data Source</MenuItem>}
               {selectedDataSource?.tables?.map((table: any) => (
                 <MenuItem key={table.name} value={table.name}>
                   {table.label}
@@ -187,6 +189,7 @@ const AddQuery = () => {
               }}
               MenuProps={MenuProps}
             >
+              {fieldsLoading && <MenuItem>Loading...</MenuItem>}
               {fields?.map((field: any) => (
                 <MenuItem key={field.name} value={field.name}>
                   <Checkbox checked={selectedFields.indexOf(field.name) > -1} />

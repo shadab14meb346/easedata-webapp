@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   SelectChangeEvent,
   Select,
@@ -29,8 +29,10 @@ const RunQueries = () => {
   >(null);
   const [selectedQuery, setSelectedQuery] = useState<null | any>(null);
   const [selectedFields, setSelectedFields] = useState<string[]>([]);
-
   const { loading, data, executeQuery, error } = useExecuteQuery();
+  useEffect(() => {
+    setSelectedFields([]);
+  }, [selectedQuery]);
 
   const handleChange = (
     event: SelectChangeEvent<typeof selectedDataSourceId>
@@ -81,6 +83,7 @@ const RunQueries = () => {
             };
           })}
           onFieldsChange={setSelectedFields}
+          selectedFields={selectedFields}
         />
       </div>
       <Box ml={4}>

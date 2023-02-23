@@ -1,13 +1,12 @@
 import {
-  Box,
   Checkbox,
+  FormControl,
   InputLabel,
   ListItemText,
   MenuItem,
   OutlinedInput,
   Select,
 } from '@mui/material';
-import { useState } from 'react';
 import { useStyles } from './useStyles';
 
 const ITEM_HEIGHT = 48;
@@ -23,21 +22,35 @@ const MenuProps = {
 
 interface IFieldsDrownProps {
   fields: any[];
+  selectedFields: string[];
   onFieldsChange: (fields: string[]) => void;
 }
-const FieldsDropdown = ({ fields, onFieldsChange }: IFieldsDrownProps) => {
+const FieldsDropdown = ({
+  fields,
+  selectedFields,
+  onFieldsChange,
+}: IFieldsDrownProps) => {
   const classes = useStyles();
-  const [selectedFields, setSelectedFields] = useState<string[]>([]);
+
   const handleChange = (event: any) => {
     const {
       target: { value },
     } = event;
-    const selectedFiendsName = value.map((value: any) => value?.name ?? value);
-    setSelectedFields(selectedFiendsName);
-    onFieldsChange(selectedFiendsName);
+    const selectedFieldsName = value.map((value: any) => value?.name ?? value);
+    if (selectedFieldsName[selectedFieldsName.length - 1] === 'ALL_SELECTED') {
+      const allAvailableFields = fields.map(
+        (value: any) => value?.name ?? value
+      );
+      const isAllAvailableFieldsSelected =
+        allAvailableFields?.length === selectedFields?.length;
+      onFieldsChange(isAllAvailableFieldsSelected ? [] : allAvailableFields);
+      return;
+    }
+    onFieldsChange(selectedFieldsName);
   };
+
   return (
-    <Box className={classes.item}>
+    <FormControl className={classes.item} sx={{ width: 300 }}>
       <InputLabel id="table-options">Fields</InputLabel>
       <Select
         className={classes.item}
@@ -52,6 +65,21 @@ const FieldsDropdown = ({ fields, onFieldsChange }: IFieldsDrownProps) => {
         }}
         MenuProps={MenuProps}
       >
+        {!fields?.length && (
+          <MenuItem value="">
+            <ListItemText primary="Select A Query First" />
+          </MenuItem>
+        )}
+        {fields?.length && (
+          <MenuItem value="ALL_SELECTED">
+            <Checkbox
+              checked={
+                fields?.length > 0 && selectedFields?.length === fields?.length
+              }
+            />
+            <ListItemText primary="Select All" />
+          </MenuItem>
+        )}
         {fields?.map((field) => (
           <MenuItem key={field.value} value={field.value}>
             <Checkbox checked={selectedFields.indexOf(field.value) > -1} />
@@ -59,7 +87,7 @@ const FieldsDropdown = ({ fields, onFieldsChange }: IFieldsDrownProps) => {
           </MenuItem>
         ))}
       </Select>
-    </Box>
+    </FormControl>
   );
 };
 export default FieldsDropdown;
