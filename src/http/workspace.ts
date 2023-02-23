@@ -91,7 +91,6 @@ export const useCreateWorkspaceMutation = () => {
           },
         },
       });
-      console.log(data);
       setData(data.createWorkspace);
     } catch (e: any) {
       setError(e.message);

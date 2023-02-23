@@ -27,7 +27,6 @@ export default function CreateWorkspace({
   } = useCreateWorkspaceMutation();
   React.useEffect(() => {
     if (error) {
-      console.log(error);
     }
     if (createdWorkspace?.id) {
       client.resetStore();

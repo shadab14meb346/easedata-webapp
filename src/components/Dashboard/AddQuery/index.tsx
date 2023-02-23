@@ -28,6 +28,7 @@ import { useCreateQueryMutation, useExecuteQuery } from '@http/query';
 import { useWorkspaceStore } from '@store/workspace';
 import { useDataSourceTableFieldsQuery } from '@http/data-source';
 import ShowData from '../RunQueries/ShowData';
+import Filters, { Filter } from './Filters';
 
 const MenuProps = {
   PaperProps: {
@@ -55,6 +56,8 @@ const AddQuery = () => {
   const [showAlert, setShowAlert] = useState<boolean>(false);
   const [selectedTable, setSelectedTable] = useState<string | null>('');
   const { loading, error, data, createQuery } = useCreateQueryMutation();
+  const [filters, setFilters] = useState<Filter[]>([]);
+
   const {
     loading: queryExecuting,
     data: queryData,
@@ -90,6 +93,15 @@ const AddQuery = () => {
       data_source_id: Number(selectedDataSource?.id),
       fields: selectedFields,
       table_name: selectedTable,
+      filters: filters.map((filter) => {
+        const { field, operator, value } = filter;
+        return {
+          field: field.name,
+          // @ts-ignore
+          operator: operator.type,
+          value,
+        };
+      }),
     });
   };
 
@@ -113,6 +125,7 @@ const AddQuery = () => {
       description: '',
     });
   };
+  console.log(filters);
   return (
     <>
       {/* //TODO: Move the snackbar to a global component */}
@@ -199,6 +212,7 @@ const AddQuery = () => {
             </Select>
           </FormControl>
         </Box>
+        <Filters fields={fields} filters={filters} setFilters={setFilters} />
         <Box mt={4} display="flex">
           <Button variant="contained" startIcon={<SaveAsIcon />}>
             <Typography variant="h6" onClick={handleCreateQuery}>
