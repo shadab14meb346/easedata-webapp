@@ -5,6 +5,7 @@ export const useStyles = makeStyles({
   main: {
     margin: theme.spacing(4),
     display: 'flex',
+    alignItems: 'flex-end',
   },
   select: {
     width: '100%',
