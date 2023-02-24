@@ -72,7 +72,11 @@ const Filter = ({
               value={getFieldsRightFormatValue(filter.value)}
               // TODO:Fix this value change logic for date picker
               onChange={(newValue) => {
-                handleFilterValueChange(filter.field.name, newValue as any);
+                handleFilterValueChange(
+                  filter.field.name,
+                  // @ts-ignore
+                  String(Date.parse(new Date(newValue)))
+                );
               }}
               renderInput={(params) => <TextField {...params} />}
             />
