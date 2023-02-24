@@ -123,9 +123,8 @@ const Filters = ({ fields, filters, setFilters, ...props }: IFilterProps) => {
           horizontal: 'left',
         }}
       >
-        <Box style={{ minHeight: 300 }} padding={2}>
+        <Box padding={2}>
           <Autocomplete
-            disablePortal
             id="combo-box-demo"
             options={fields}
             sx={{ width: 300 }}
