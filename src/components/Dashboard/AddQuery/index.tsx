@@ -11,17 +11,17 @@ import {
   FormHelperText,
   SelectChangeEvent,
   Checkbox,
-  ListItemText,
   Button,
   Snackbar,
   AlertTitle,
+  Autocomplete,
 } from '@mui/material';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import Portal from '@mui/base/Portal';
 import SaveAsIcon from '@mui/icons-material/SaveAs';
-import classNames from 'classnames';
 import SlideshowIcon from '@mui/icons-material/Slideshow';
-
+import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import { useStyles } from './useStyles';
 import DataSourcesDropdown from '@components/common/DataSourcesDropdown';
 import { useCreateQueryMutation, useExecuteQuery } from '@http/query';
@@ -30,15 +30,9 @@ import { useDataSourceTableFieldsQuery } from '@http/data-source';
 import ShowData from '../RunQueries/ShowData';
 import Filters from './Filters';
 import { FilterType } from 'types/filter';
+const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
+const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: '500px',
-      maxWidth: '250px',
-    },
-  },
-};
 const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
   ref
@@ -49,7 +43,7 @@ const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(
 const AddQuery = () => {
   const classes = useStyles();
   const { selectedWorkspace } = useWorkspaceStore();
-  const [selectedFields, setSelectedFields] = useState<string[]>([]);
+  const [selectedFields, setSelectedFields] = useState<any[]>([]);
   const [queryName, setQueryName] = useState<string>('');
   const [selectedDataSource, setSelectedDataSource] = useState<null | any>(
     null
@@ -92,7 +86,7 @@ const AddQuery = () => {
     if (!selectedDataSource || !selectedTable) return;
     executeQuery({
       data_source_id: Number(selectedDataSource?.id),
-      fields: selectedFields,
+      fields: selectedFields.map((filed) => filed.name),
       table_name: selectedTable,
       filters: filters.map((filter) => {
         const { field, operator, value } = filter;
@@ -109,17 +103,10 @@ const AddQuery = () => {
   const handleDataSourceSelect = (selectedDataSource: any) => {
     setSelectedDataSource(selectedDataSource);
   };
-  const handleChange = (event: any) => {
-    const {
-      target: { value },
-    } = event;
-    const selectedFiendsName = value.map((value: any) => value?.name ?? value);
-    setSelectedFields(selectedFiendsName);
-  };
   const handleCreateQuery = () => {
     createQuery({
       name: queryName,
-      fields: selectedFields,
+      fields: selectedFields.map((filed) => filed.name),
       data_source_id: Number(selectedDataSource?.id),
       table_name: selectedTable as string,
       workspace_id: Number(selectedWorkspace?.id),
@@ -184,33 +171,33 @@ const AddQuery = () => {
               ))}
             </Select>
           </Box>
-          <FormControl sx={{ width: 300 }} className={classes.item}>
-            <InputLabel id="table-options">Fields</InputLabel>
-            <Select
-              className={classNames(classes.item, classes.fieldSelect)}
-              labelId="table-options"
-              id="demo-multiple-checkbox"
+          <Box sx={{ width: 300 }} className={classes.item}>
+            <InputLabel id="table-options">Select Fields</InputLabel>
+            <Autocomplete
+              limitTags={1}
               multiple
-              maxRows={1}
+              options={fields}
+              disableCloseOnSelect
+              getOptionLabel={(option) => option.label}
+              renderOption={(props, option, { selected }) => (
+                <li {...props}>
+                  <Checkbox
+                    icon={icon}
+                    checkedIcon={checkedIcon}
+                    style={{ marginRight: 8 }}
+                    checked={selected}
+                  />
+                  {option.label}
+                </li>
+              )}
+              renderInput={(params) => <TextField {...params} />}
               value={selectedFields}
-              onChange={handleChange}
-              input={<OutlinedInput label="Tag" />}
-              renderValue={(selected) => {
-                return selected
-                  .map((value: any) => value?.name ?? value)
-                  .join(', ');
+              onChange={(event: any, newValue: any) => {
+                setSelectedFields(newValue);
               }}
-              MenuProps={MenuProps}
-            >
-              {fieldsLoading && <MenuItem>Loading...</MenuItem>}
-              {fields?.map((field: any) => (
-                <MenuItem key={field.name} value={field.name}>
-                  <Checkbox checked={selectedFields.indexOf(field.name) > -1} />
-                  <ListItemText primary={field.label} />
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+              sx={{ width: '300px' }}
+            />
+          </Box>
         </Box>
         <Filters fields={fields} filters={filters} setFilters={setFilters} />
         <Box mt={4} display="flex">

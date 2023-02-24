@@ -1,6 +1,7 @@
 import {
   Autocomplete,
   Box,
+  BoxProps,
   Button,
   Popover,
   TextField,
@@ -21,7 +22,7 @@ import Operators from './Operators';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers-pro';
 import { AdapterDayjs } from '@mui/x-date-pickers-pro/AdapterDayjs';
 
-interface IFilterProps {
+interface IFilterProps extends BoxProps {
   fields: { name: string; label: string }[];
   filters: FilterType[];
   setFilters: (filters: FilterType[]) => void;
@@ -32,7 +33,7 @@ export type Filed = {
   data_type: OperatorDataType;
 };
 
-const Filters = ({ fields, filters, setFilters }: IFilterProps) => {
+const Filters = ({ fields, filters, setFilters, ...props }: IFilterProps) => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [selectedField, setSelectedField] = useState<Filed | null>(null);
@@ -91,7 +92,7 @@ const Filters = ({ fields, filters, setFilters }: IFilterProps) => {
   };
 
   return (
-    <Box display="flex" alignItems="center" mt={2}>
+    <Box display="flex" alignItems="center" mt={2} {...props}>
       <Button
         aria-describedby={id}
         onClick={handleClick}
