@@ -15,11 +15,9 @@ import {
   FilterType,
   getOperatorsForDataType,
   OperatorDataType,
-  operators,
   SelectedOperator,
 } from 'types/filter';
 import Operators from './Operators';
-import RangeDatePicker from './RangeDatePicker';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers-pro';
 import { AdapterDayjs } from '@mui/x-date-pickers-pro/AdapterDayjs';
 

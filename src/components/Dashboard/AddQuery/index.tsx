@@ -28,7 +28,8 @@ import { useCreateQueryMutation, useExecuteQuery } from '@http/query';
 import { useWorkspaceStore } from '@store/workspace';
 import { useDataSourceTableFieldsQuery } from '@http/data-source';
 import ShowData from '../RunQueries/ShowData';
-import Filters, { Filter } from './Filters';
+import Filters from './Filters';
+import { FilterType } from 'types/filter';
 
 const MenuProps = {
   PaperProps: {
@@ -56,7 +57,7 @@ const AddQuery = () => {
   const [showAlert, setShowAlert] = useState<boolean>(false);
   const [selectedTable, setSelectedTable] = useState<string | null>('');
   const { loading, error, data, createQuery } = useCreateQueryMutation();
-  const [filters, setFilters] = useState<Filter[]>([]);
+  const [filters, setFilters] = useState<FilterType[]>([]);
 
   const {
     loading: queryExecuting,
