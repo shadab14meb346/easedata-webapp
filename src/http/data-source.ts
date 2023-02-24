@@ -32,6 +32,7 @@ const GET_DATA_SOURCE_TABLE_FIELDS = gql`
     getDataSourceTableFields(input: $input) {
       name
       label
+      data_type
     }
   }
 `;

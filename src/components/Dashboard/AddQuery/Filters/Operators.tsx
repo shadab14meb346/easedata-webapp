@@ -25,7 +25,7 @@ const Operators = ({
         }}
         value={selected}
       >
-        {operators.map((operator: SelectedOperator) => (
+        {operators?.map((operator: SelectedOperator) => (
           // @ts-ignore
           <MenuItem value={operator}>{operator.label}</MenuItem>
         ))}

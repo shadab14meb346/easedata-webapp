@@ -1,15 +1,18 @@
 import { Box, TextField, Typography } from '@mui/material';
-
 import DeleteIcon from '@mui/icons-material/Delete';
+import dayjs from 'dayjs';
 
 import { useStyles } from './useStyles';
 import Operators from './Operators';
 import {
   FilterType,
-  operators,
+  getOperatorsForDataType,
+  OperatorDataType,
   OperatorType,
   OperatorTypeLabel,
 } from 'types/filter';
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers-pro';
+import { AdapterDayjs } from '@mui/x-date-pickers-pro/AdapterDayjs';
 
 interface IFilterProps {
   filter: FilterType;
@@ -24,6 +27,12 @@ const Filter = ({
   handleFilterValueChange,
 }: IFilterProps) => {
   const classes = useStyles();
+  const getFieldsRightFormatValue = (value: string) => {
+    if (filter.field.data_type === OperatorDataType.DATE) {
+      return dayjs(Number(filter.value)).format('YYYY-MM-DD');
+    }
+    return value;
+  };
   return (
     <div className={classes.filterMain}>
       <DeleteIcon
@@ -37,7 +46,7 @@ const Filter = ({
       <Box display="flex" mt={0.5}>
         <Operators
           className={classes.filterOperator}
-          operators={operators}
+          operators={getOperatorsForDataType(filter.field.data_type)}
           onChange={(newOperator: {
             type: OperatorType;
             label: OperatorTypeLabel;
@@ -46,14 +55,29 @@ const Filter = ({
           }}
           selected={filter.operator}
         />
-        {/* //TODO:handle the value change here */}
-        <TextField
-          className={classes.input}
-          value={filter.value}
-          onChange={(e) =>
-            handleFilterValueChange(filter.field.name, e.target.value)
-          }
-        />
+        {filter?.field?.data_type !== OperatorDataType.DATE && (
+          <TextField
+            className={classes.input}
+            value={getFieldsRightFormatValue(filter.value)}
+            onChange={(e) =>
+              handleFilterValueChange(filter.field.name, e.target.value)
+            }
+          />
+        )}
+        {filter?.field?.data_type === OperatorDataType.DATE && (
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DatePicker
+              className={classes.input}
+              label="Date"
+              value={getFieldsRightFormatValue(filter.value)}
+              // TODO:Fix this value change logic for date picker
+              onChange={(newValue) => {
+                handleFilterValueChange(filter.field.name, newValue as any);
+              }}
+              renderInput={(params) => <TextField {...params} />}
+            />
+          </LocalizationProvider>
+        )}
       </Box>
     </div>
   );

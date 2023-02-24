@@ -125,7 +125,6 @@ const AddQuery = () => {
       description: '',
     });
   };
-  console.log(filters);
   return (
     <>
       {/* //TODO: Move the snackbar to a global component */}

@@ -13,12 +13,15 @@ import { useState } from 'react';
 import Filter from './Filter';
 import {
   FilterType,
+  getOperatorsForDataType,
+  OperatorDataType,
   operators,
-  OperatorType,
-  OperatorTypeLabel,
   SelectedOperator,
 } from 'types/filter';
 import Operators from './Operators';
+import RangeDatePicker from './RangeDatePicker';
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers-pro';
+import { AdapterDayjs } from '@mui/x-date-pickers-pro/AdapterDayjs';
 
 interface IFilterProps {
   fields: { name: string; label: string }[];
@@ -28,6 +31,7 @@ interface IFilterProps {
 export type Filed = {
   label: string;
   name: string;
+  data_type: OperatorDataType;
 };
 
 const Filters = ({ fields, filters, setFilters }: IFilterProps) => {
@@ -51,6 +55,10 @@ const Filters = ({ fields, filters, setFilters }: IFilterProps) => {
       value: selectedFieldValue,
       operator: selectedOperator,
     };
+    if (selectedField?.data_type === OperatorDataType.DATE) {
+      // @ts-ignore
+      filter.value = String(Date.parse(new Date(selectedFieldValue)));
+    }
     // @ts-ignore
     setFilters((prev) => [...prev, filter]);
   };
@@ -131,21 +139,37 @@ const Filters = ({ fields, filters, setFilters }: IFilterProps) => {
           />
           <Operators
             className={classes.operators}
-            operators={operators}
+            operators={getOperatorsForDataType(
+              selectedField?.data_type as OperatorDataType
+            )}
             onChange={(operator) => {
               setSelectedOperator(operator);
             }}
             selected={selectedOperator as SelectedOperator}
           />
           <Box my={2} width="100%">
-            <TextField
-              label="value"
-              style={{ width: '100%' }}
-              value={selectedFieldValue}
-              onChange={(e) => {
-                setSelectedFieldValue(e.target.value);
-              }}
-            />
+            {selectedField?.data_type !== OperatorDataType.DATE && (
+              <TextField
+                label="value"
+                style={{ width: '100%' }}
+                value={selectedFieldValue}
+                onChange={(e) => {
+                  setSelectedFieldValue(e.target.value);
+                }}
+              />
+            )}
+            {selectedField?.data_type === OperatorDataType.DATE && (
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker
+                  label="Start Date"
+                  value={selectedFieldValue}
+                  onChange={(newValue) => {
+                    setSelectedFieldValue(newValue as string);
+                  }}
+                  renderInput={(params) => <TextField {...params} />}
+                />
+              </LocalizationProvider>
+            )}
           </Box>
           <Button variant="contained" onClick={handleAddFilter}>
             Add
