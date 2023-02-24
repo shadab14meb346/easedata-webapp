@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { gql } from 'graphql-tag';
 import { client } from '@graphql/index';
+import { OperatorType } from 'types/filter';
 
 const CREATE_QUERY_MUTATION = gql`
   mutation Mutation($input: DataQueryInput!) {
@@ -60,10 +61,16 @@ export const useCreateQueryMutation = () => {
   };
 };
 
+type filterInput = {
+  field: string;
+  operator: OperatorType;
+  value: string;
+};
 type ExecuteQueryInput = {
   data_source_id: number;
   fields: string[];
   table_name: string;
+  filters?: filterInput[];
 };
 export const useExecuteQuery = () => {
   const [data, setData] = useState<any | null>(null);
