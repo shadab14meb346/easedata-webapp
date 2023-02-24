@@ -169,9 +169,18 @@ const Filters = ({ fields, filters, setFilters, ...props }: IFilterProps) => {
               </LocalizationProvider>
             )}
           </Box>
-          <Button variant="contained" onClick={handleAddFilter}>
-            Add
-          </Button>
+          <Box>
+            <Button variant="contained" onClick={handleAddFilter}>
+              Add
+            </Button>
+            <Button
+              variant="outlined"
+              onClick={handleClose}
+              sx={{ marginLeft: 2 }}
+            >
+              Close
+            </Button>
+          </Box>
         </Box>
       </Popover>
     </Box>
