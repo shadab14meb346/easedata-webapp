@@ -11,7 +11,9 @@ export enum OperatorType {
   LESS_THAN = 'LT',
   LESS_THAN_OR_EQUAL_TO = 'LTE',
   IS_NOT_EQUAL_TO = 'NEQ',
-  IS_WITHIN = 'BETWEEN',
+  //the operator for the 'is within' is not yet defined
+  IS_WITHIN = 'is within',
+  BETWEEN = 'BETWEEN',
 }
 export enum OperatorTypeLabel {
   IS_NOT_EMPTY = 'is not empty',
@@ -24,10 +26,12 @@ export enum OperatorTypeLabel {
   LESS_THAN_OR_EQUAL_TO = 'less or equal to',
   IS_NOT_EQUAL_TO = 'is not equal to',
   IS_WITHIN = 'is within',
+  BETWEEN = 'between',
 }
 export type FilterType = {
   field: Filed;
   value: string;
+  highValue?: string;
   operator: { type: OperatorType; label: OperatorTypeLabel };
 };
 export enum OperatorDataType {
@@ -37,12 +41,8 @@ export enum OperatorDataType {
 }
 const operatorsForDateDataType = [
   {
-    type: OperatorType.LESS_THAN_OR_EQUAL_TO,
-    label: OperatorTypeLabel.LESS_THAN_OR_EQUAL_TO,
-  },
-  {
-    type: OperatorType.GREATER_THAN_OR_EQUAL_TO,
-    label: OperatorTypeLabel.GREATER_THAN_OR_EQUAL_TO,
+    type: OperatorType.BETWEEN,
+    label: OperatorTypeLabel.BETWEEN,
   },
   //TODO: add for 'is not empty', 'is empty', 'contains', 'does not contain'
 ];

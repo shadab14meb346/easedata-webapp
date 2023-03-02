@@ -13,23 +13,27 @@ import {
 } from 'types/filter';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers-pro';
 import { AdapterDayjs } from '@mui/x-date-pickers-pro/AdapterDayjs';
+import { FilterValueChangeInput } from '.';
+import classNames from 'classnames';
 
 interface IFilterProps {
   filter: FilterType;
   handleDeleteFilter: () => void;
   handleFilterOperatorChange: (filterName: string, newOperator: any) => void;
-  handleFilterValueChange: (filterName: string, newValue: string) => void;
+  handleFilterValueChange: (input: FilterValueChangeInput) => void;
+  handleFilterHighValueChange: (input: any) => void;
 }
 const Filter = ({
   filter,
   handleDeleteFilter,
   handleFilterOperatorChange,
   handleFilterValueChange,
+  handleFilterHighValueChange,
 }: IFilterProps) => {
   const classes = useStyles();
   const getFieldsRightFormatValue = (value: string) => {
     if (filter.field.data_type === OperatorDataType.DATE) {
-      return dayjs(Number(filter.value)).format('YYYY-MM-DD');
+      return dayjs(Number(value)).format('YYYY-MM-DD');
     }
     return value;
   };
@@ -60,27 +64,48 @@ const Filter = ({
             className={classes.input}
             value={getFieldsRightFormatValue(filter.value)}
             onChange={(e) =>
-              handleFilterValueChange(filter.field.name, e.target.value)
+              handleFilterValueChange({
+                filterName: filter.field.name,
+                value: e.target.value,
+              })
             }
           />
         )}
         {filter?.field?.data_type === OperatorDataType.DATE && (
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DatePicker
-              className={classes.input}
-              label="Date"
-              value={getFieldsRightFormatValue(filter.value)}
-              // TODO:Fix this value change logic for date picker
-              onChange={(newValue) => {
-                handleFilterValueChange(
-                  filter.field.name,
-                  // @ts-ignore
-                  String(Date.parse(new Date(newValue)))
-                );
-              }}
-              renderInput={(params) => <TextField {...params} />}
-            />
-          </LocalizationProvider>
+          <Box display="flex" alignItems="center">
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DatePicker
+                className={classNames(classes.input, classes.datePicker)}
+                label="From"
+                value={getFieldsRightFormatValue(filter.value)}
+                onChange={(newValue) => {
+                  handleFilterValueChange({
+                    filterName: filter.field.name,
+                    //@ts-ignore
+                    value: String(Date.parse(new Date(newValue))),
+                  });
+                }}
+                renderInput={(params) => <TextField {...params} />}
+              />
+            </LocalizationProvider>
+            <Typography ml={1}>To</Typography>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DatePicker
+                className={classNames(classes.input, classes.datePicker)}
+                label="Till"
+                value={getFieldsRightFormatValue(filter.highValue as string)}
+                onChange={(newValue) => {
+                  // setSecondaryDateFieldValue(newValue as string);
+                  handleFilterHighValueChange({
+                    filterName: filter.field.name,
+                    //@ts-ignore
+                    highValue: String(Date.parse(new Date(newValue))),
+                  });
+                }}
+                renderInput={(params) => <TextField {...params} />}
+              />
+            </LocalizationProvider>
+          </Box>
         )}
       </Box>
     </div>
