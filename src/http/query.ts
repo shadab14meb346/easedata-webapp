@@ -65,6 +65,7 @@ type filterInput = {
   field: string;
   operator: OperatorType;
   value: string;
+  high_value?: string;
 };
 type ExecuteQueryInput = {
   data_source_id: number;

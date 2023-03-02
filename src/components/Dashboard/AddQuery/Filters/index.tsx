@@ -16,6 +16,8 @@ import {
   FilterType,
   getOperatorsForDataType,
   OperatorDataType,
+  OperatorType,
+  OperatorTypeLabel,
   SelectedOperator,
 } from 'types/filter';
 import Operators from './Operators';
@@ -32,12 +34,18 @@ export type Filed = {
   name: string;
   data_type: OperatorDataType;
 };
+export type FilterValueChangeInput = {
+  filterName: string;
+  value: string;
+};
 
 const Filters = ({ fields, filters, setFilters, ...props }: IFilterProps) => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [selectedField, setSelectedField] = useState<Filed | null>(null);
   const [selectedFieldValue, setSelectedFieldValue] = useState<string>('');
+  const [secondaryDateFieldValue, setSecondaryDateFieldValue] =
+    useState<string>('');
   const [selectedOperator, setSelectedOperator] =
     useState<SelectedOperator | null>(null);
   const open = Boolean(anchorEl);
@@ -48,18 +56,31 @@ const Filters = ({ fields, filters, setFilters, ...props }: IFilterProps) => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const resetFilterForm = () => {
+    setSelectedField(null);
+    setSelectedFieldValue('');
+    setSelectedOperator(null);
+  };
   const handleAddFilter = () => {
     const filter = {
       field: selectedField,
       value: selectedFieldValue,
       operator: selectedOperator,
+      highValue: '',
     };
     if (selectedField?.data_type === OperatorDataType.DATE) {
-      // @ts-ignore
-      filter.value = String(Date.parse(new Date(selectedFieldValue)));
+      if (selectedOperator?.type === OperatorType.BETWEEN) {
+        //@ts-ignore
+        filter.value = String(Date.parse(new Date(selectedFieldValue)));
+        filter.highValue = String(
+          //@ts-ignore
+          Date.parse(new Date(secondaryDateFieldValue))
+        );
+      }
     }
     // @ts-ignore
     setFilters((prev) => [...prev, filter]);
+    resetFilterForm();
   };
   const handleDeleteFilter = (index: number) => {
     // @ts-ignore
@@ -79,12 +100,26 @@ const Filters = ({ fields, filters, setFilters, ...props }: IFilterProps) => {
       })
     );
   };
-  const handleFilterValueChange = (filterName: string, value: string) => {
+  const handleFilterValueChange = ({
+    filterName,
+    value,
+  }: FilterValueChangeInput) => {
     // @ts-ignore
     setFilters((prev: FilterType[]) =>
       prev.map((filter: FilterType) => {
         if (filter.field.name === filterName) {
           return { ...filter, value };
+        }
+        return filter;
+      })
+    );
+  };
+  const handleFilterHighValueChange = ({ filterName, highValue }: any) => {
+    // @ts-ignore
+    setFilters((prev: FilterType[]) =>
+      prev.map((filter: FilterType) => {
+        if (filter.field.name === filterName) {
+          return { ...filter, highValue };
         }
         return filter;
       })
@@ -110,6 +145,7 @@ const Filters = ({ fields, filters, setFilters, ...props }: IFilterProps) => {
             }}
             handleFilterOperatorChange={handleFilterOperatorChange}
             handleFilterValueChange={handleFilterValueChange}
+            handleFilterHighValueChange={handleFilterHighValueChange}
           />
         ))}
       </Box>
@@ -157,16 +193,33 @@ const Filters = ({ fields, filters, setFilters, ...props }: IFilterProps) => {
               />
             )}
             {selectedField?.data_type === OperatorDataType.DATE && (
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DatePicker
-                  label="Start Date"
-                  value={selectedFieldValue}
-                  onChange={(newValue) => {
-                    setSelectedFieldValue(newValue as string);
-                  }}
-                  renderInput={(params) => <TextField {...params} />}
-                />
-              </LocalizationProvider>
+              <>
+                <Box mb={1}>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DatePicker
+                      label="Start Date"
+                      value={selectedFieldValue}
+                      onChange={(newValue) => {
+                        setSelectedFieldValue(newValue as string);
+                      }}
+                      renderInput={(params) => <TextField {...params} />}
+                    />
+                  </LocalizationProvider>
+                </Box>
+                <Typography>To</Typography>
+                <Box mt={1}>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DatePicker
+                      label="End Date"
+                      value={secondaryDateFieldValue}
+                      onChange={(newValue) => {
+                        setSecondaryDateFieldValue(newValue as string);
+                      }}
+                      renderInput={(params) => <TextField {...params} />}
+                    />
+                  </LocalizationProvider>
+                </Box>
+              </>
             )}
           </Box>
           <Box>

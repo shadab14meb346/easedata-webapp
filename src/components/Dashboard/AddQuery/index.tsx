@@ -89,12 +89,13 @@ const AddQuery = () => {
       fields: selectedFields.map((filed) => filed.name),
       table_name: selectedTable,
       filters: filters.map((filter) => {
-        const { field, operator, value } = filter;
+        const { field, operator, value, highValue } = filter;
         return {
           field: field.name,
           // @ts-ignore
           operator: operator.type,
           value,
+          ...(highValue && { high_value: highValue }),
         };
       }),
     });

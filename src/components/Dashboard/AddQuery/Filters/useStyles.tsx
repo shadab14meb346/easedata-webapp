@@ -43,4 +43,7 @@ export const useStyles = makeStyles({
       padding: theme.spacing(1),
     },
   },
+  datePicker: {
+    maxWidth: 160,
+  },
 });
