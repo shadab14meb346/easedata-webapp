@@ -85,7 +85,6 @@ function HeaderUserbox() {
     localStorage.removeItem('user');
     localStorage.removeItem('jwt-token');
     client.resetStore();
-    router.replace('/sign-in');
   };
 
   return (
