@@ -2,6 +2,7 @@ import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
+import { format } from 'date-fns';
 import { useStyles } from './useStyles';
 
 interface IConnectionCardProp {
@@ -18,11 +19,12 @@ const ConnectionCard = ({ type, createdAt }: IConnectionCardProp) => {
             {type}
           </Typography>
           <Typography variant="body2">Created On</Typography>
-          <Typography variant="caption">{createdAt}</Typography>
+          <Typography>
+            {format(new Date(Number(createdAt)), 'MMM dd, hh:mm a')}
+          </Typography>
         </CardContent>
       </Card>
     </Box>
   );
 };
-
 export default ConnectionCard;
