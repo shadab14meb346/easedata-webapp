@@ -176,6 +176,7 @@ const AddQuery = () => {
             <Autocomplete
               limitTags={1}
               multiple
+              loading={fieldsLoading}
               options={fields}
               disableCloseOnSelect
               getOptionLabel={(option) => option.label}

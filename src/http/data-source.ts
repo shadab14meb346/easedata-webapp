@@ -110,6 +110,7 @@ export const useDataSourceTableFieldsQuery = () => {
   ) => {
     try {
       setLoading(true);
+      setData([]);
       const { data } = await client.query({
         query: GET_DATA_SOURCE_TABLE_FIELDS,
         variables: {
@@ -119,6 +120,7 @@ export const useDataSourceTableFieldsQuery = () => {
       setData(data.getDataSourceTableFields);
     } catch (e: any) {
       setError(e.message);
+      setData([]);
     } finally {
       setLoading(false);
     }
