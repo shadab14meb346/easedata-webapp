@@ -1,4 +1,4 @@
-import { Box, TextField, Typography } from '@mui/material';
+import { Box, createFilterOptions, TextField, Typography } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import dayjs from 'dayjs';
 
@@ -16,6 +16,10 @@ import { AdapterDayjs } from '@mui/x-date-pickers-pro/AdapterDayjs';
 import { FilterValueChangeInput } from '.';
 import classNames from 'classnames';
 
+export const filterOptions = createFilterOptions({
+  matchFrom: 'start',
+  stringify: (option: any) => option.label,
+});
 interface IFilterProps {
   filter: FilterType;
   handleDeleteFilter: () => void;

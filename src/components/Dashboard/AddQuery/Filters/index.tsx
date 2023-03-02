@@ -11,7 +11,7 @@ import FilterListIcon from '@mui/icons-material/FilterList';
 
 import { useStyles } from './useStyles';
 import { useState } from 'react';
-import Filter from './Filter';
+import Filter, { filterOptions } from './Filter';
 import {
   FilterType,
   getOperatorsForDataType,
@@ -161,6 +161,7 @@ const Filters = ({ fields, filters, setFilters, ...props }: IFilterProps) => {
       >
         <Box padding={2}>
           <Autocomplete
+            filterOptions={filterOptions}
             id="combo-box-demo"
             options={fields}
             sx={{ width: 300 }}

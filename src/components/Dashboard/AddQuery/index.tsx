@@ -15,6 +15,7 @@ import {
   Snackbar,
   AlertTitle,
   Autocomplete,
+  createFilterOptions,
 } from '@mui/material';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import Portal from '@mui/base/Portal';
@@ -30,6 +31,7 @@ import { useDataSourceTableFieldsQuery } from '@http/data-source';
 import ShowData from '../RunQueries/ShowData';
 import Filters from './Filters';
 import { FilterType } from 'types/filter';
+import { filterOptions } from './Filters/Filter';
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
@@ -176,6 +178,7 @@ const AddQuery = () => {
             <InputLabel id="table-options">Select Fields</InputLabel>
             <Autocomplete
               limitTags={1}
+              filterOptions={filterOptions}
               multiple
               loading={fieldsLoading}
               options={fields}
