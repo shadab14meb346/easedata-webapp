@@ -48,6 +48,11 @@ const Filters = ({ fields, filters, setFilters, ...props }: IFilterProps) => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const resetFilterForm = () => {
+    setSelectedField(null);
+    setSelectedFieldValue('');
+    setSelectedOperator(null);
+  };
   const handleAddFilter = () => {
     const filter = {
       field: selectedField,
@@ -60,6 +65,7 @@ const Filters = ({ fields, filters, setFilters, ...props }: IFilterProps) => {
     }
     // @ts-ignore
     setFilters((prev) => [...prev, filter]);
+    resetFilterForm();
   };
   const handleDeleteFilter = (index: number) => {
     // @ts-ignore
