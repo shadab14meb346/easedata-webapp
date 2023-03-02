@@ -13,6 +13,7 @@ import {
 
 import SidebarMenu from './SidebarMenu';
 import Workspaces from '@components/Workspaces';
+import HeaderUserbox from '../Header/Userbox';
 // import Logo from 'src/components/LogoSign';
 
 const SidebarWrapper = styled(Box)(
@@ -60,6 +61,7 @@ function Sidebar() {
             background: theme.colors.alpha.trueWhite[10],
           }}
         />
+        <HeaderUserbox />
       </SidebarWrapper>
       <Drawer
         sx={{
