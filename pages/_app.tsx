@@ -17,6 +17,7 @@ import theme from '../src/style-system/theme';
 import '../src/style-system/global.css';
 import createEmotionCache from 'src/createEmotionCache';
 import { getMe } from '@http/auth';
+import Script from 'next/script';
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
@@ -83,30 +84,44 @@ const MyApp = (props: MyAppProps) => {
   if (tokenBeingValidated) return <PageLoader />;
 
   return (
-    <AuthProvider
-      value={{
-        authState,
-        setAuthState: (userAuthInfo: IAuthState) => setAuthState(userAuthInfo),
-      }}
-    >
-      <ApolloProvider client={apolloClient}>
-        <CacheProvider value={emotionCache}>
-          <Head>
-            <meta
-              name="viewport"
-              content="initial-scale=1, width=device-width"
-            />
-          </Head>
-          <ThemeProvider theme={theme}>
-            {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-            <CssBaseline />
-            <ClientOnly>
-              <Layout Component={Component} pageProps={pageProps} />
-            </ClientOnly>
-          </ThemeProvider>
-        </CacheProvider>
-      </ApolloProvider>
-    </AuthProvider>
+    <>
+      <AuthProvider
+        value={{
+          authState,
+          setAuthState: (userAuthInfo: IAuthState) =>
+            setAuthState(userAuthInfo),
+        }}
+      >
+        <ApolloProvider client={apolloClient}>
+          <CacheProvider value={emotionCache}>
+            <Head>
+              <meta
+                name="viewport"
+                content="initial-scale=1, width=device-width"
+              />
+            </Head>
+            <ThemeProvider theme={theme}>
+              {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+              <CssBaseline />
+              <ClientOnly>
+                <Layout Component={Component} pageProps={pageProps} />
+              </ClientOnly>
+            </ThemeProvider>
+          </CacheProvider>
+        </ApolloProvider>
+      </AuthProvider>
+      <Script
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{
+          __html: `
+         (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "${process.env.NEXT_PUBLIC_CLARITY_ID}");`,
+        }}
+      />
+    </>
   );
 };
 
