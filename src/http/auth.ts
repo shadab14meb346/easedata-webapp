@@ -70,8 +70,12 @@ export const useRegisterMutation = () => {
         },
       });
       setData(data.register);
+      localStorage.setItem('jwt-token', data.register.token);
+      localStorage.setItem('user', JSON.stringify(data.register.user));
     } catch (e: any) {
       setError(e.message);
+      localStorage.removeItem('user');
+      localStorage.removeItem('jwt-token');
     } finally {
       setLoading(false);
     }
