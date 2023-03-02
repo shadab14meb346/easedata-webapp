@@ -18,7 +18,7 @@ const WithAuth = (Component: any) => {
     const { isRestricted } = props;
 
     if (!isAuthenticated && !isRestricted) {
-      router.push(ROUTES.SIGN_IN);
+      router.replace('/sign-in');
       return;
     }
     if (isRestricted && isAuthenticated) {
