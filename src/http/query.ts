@@ -19,9 +19,15 @@ const CREATE_QUERY_MUTATION = gql`
   }
 `;
 const EXECUTE_QUERY = gql`
-  query ExecuteQuery($input: ExecuteQueryInput!) {
-    executeQuery(input: $input) {
+  query ExecuteQuery($input: ExecuteQueryInput!, $limit: Int, $after: String) {
+    executeQuery(input: $input, limit: $limit, after: $after) {
       data
+      page_info {
+        has_next_page
+        has_previous_page
+        start_cursor
+        end_cursor
+      }
     }
   }
 `;
@@ -72,21 +78,28 @@ type ExecuteQueryInput = {
   fields: string[];
   table_name: string;
   filters?: filterInput[];
+  limit?: number;
+  after?: string;
 };
 export const useExecuteQuery = () => {
-  const [data, setData] = useState<any | null>(null);
+  const [data, setData] = useState<any[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [pageInfo, setPageInfo] = useState<any | null>(null);
   const executeQuery = async (input: ExecuteQueryInput) => {
+    const { after, limit, ...restInput } = input;
     try {
       setLoading(true);
       const { data } = await client.query({
         query: EXECUTE_QUERY,
         variables: {
-          input,
+          input: restInput,
+          limit: limit || 100,
+          after: after || '0',
         },
       });
-      setData(data.executeQuery.data);
+      setData((prevData: any[]) => [...prevData, ...data.executeQuery.data]);
+      setPageInfo(data.executeQuery.page_info);
     } catch (e: any) {
       setError(e.message);
     } finally {
@@ -98,5 +111,6 @@ export const useExecuteQuery = () => {
     loading,
     error,
     data,
+    pageInfo,
   };
 };
