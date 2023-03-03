@@ -60,6 +60,7 @@ const AddQuery = () => {
     data: queryData,
     executeQuery,
     error: executeQueryError,
+    pageInfo,
   } = useExecuteQuery();
   const {
     loading: fieldsLoading,
@@ -115,6 +116,27 @@ const AddQuery = () => {
       workspace_id: Number(selectedWorkspace?.id),
       description: '',
     });
+  };
+  const handleLoadMore = () => {
+    if (!selectedDataSource || !selectedTable) return;
+    if (pageInfo?.has_next_page) {
+      executeQuery({
+        data_source_id: Number(selectedDataSource?.id),
+        fields: selectedFields.map((filed) => filed.name),
+        table_name: selectedTable,
+        filters: filters.map((filter) => {
+          const { field, operator, value, highValue } = filter;
+          return {
+            field: field.name,
+            // @ts-ignore
+            operator: operator.type,
+            value,
+            ...(highValue && { high_value: highValue }),
+          };
+        }),
+        after: pageInfo?.end_cursor,
+      });
+    }
   };
   return (
     <>
@@ -223,9 +245,12 @@ const AddQuery = () => {
           </Button>
         </Box>
         <ShowData
+          dataLoading={queryExecuting}
           data={queryData}
           className={classes.showData}
           exportFileName={selectedTable as string}
+          pageInfo={pageInfo}
+          handleLoadMore={handleLoadMore}
         />
       </div>
     </>
