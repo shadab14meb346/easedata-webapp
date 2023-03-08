@@ -18,6 +18,7 @@ import '../src/style-system/global.css';
 import createEmotionCache from 'src/createEmotionCache';
 import { getMe } from '@http/auth';
 import Script from 'next/script';
+import { SnackbarProvider } from 'notistack';
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
@@ -84,7 +85,7 @@ const MyApp = (props: MyAppProps) => {
   if (tokenBeingValidated) return <PageLoader />;
 
   return (
-    <>
+    <SnackbarProvider maxSnack={3}>
       <AuthProvider
         value={{
           authState,
@@ -121,7 +122,7 @@ const MyApp = (props: MyAppProps) => {
     })(window, document, "clarity", "script", "${process.env.NEXT_PUBLIC_CLARITY_ID}");`,
         }}
       />
-    </>
+    </SnackbarProvider>
   );
 };
 
