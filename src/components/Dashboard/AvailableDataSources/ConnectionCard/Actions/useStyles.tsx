@@ -10,4 +10,9 @@ export const useStyles = makeStyles({
     // minHeight: 250,
     position: 'relative',
   },
+  settingsButton: {
+    position: 'absolute',
+    top: 5,
+    right: 5,
+  },
 });

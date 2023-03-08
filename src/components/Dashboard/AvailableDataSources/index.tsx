@@ -7,7 +7,7 @@ import { useWorkspaceStore } from '@store/workspace';
 
 const AvailableDataSources = () => {
   const { selectedWorkspace } = useWorkspaceStore();
-  const { data, loading, error } = useDataSourcesListQuery(
+  const { data, loading, error, refetch } = useDataSourcesListQuery(
     selectedWorkspace?.id as string
   );
   const classes = useStyles();
@@ -22,6 +22,8 @@ const AvailableDataSources = () => {
               <ConnectionCard
                 createdAt={dataSource.created_at}
                 type={dataSource.type}
+                dataSourceId={dataSource.id}
+                refetch={refetch}
               />
             ))}
           </>

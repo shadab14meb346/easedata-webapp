@@ -36,6 +36,16 @@ const GET_DATA_SOURCE_TABLE_FIELDS = gql`
     }
   }
 `;
+
+const DELETE_DATA_SOURCE = gql`
+  mutation DeleteDataSource($input: DeleteDataSourceInput!) {
+    deleteDataSource(input: $input) {
+      id
+      success
+    }
+  }
+`;
+
 export const useDataSourcesListQuery = (workspaceId: string) => {
   const [data, setData] = useState<any | null>([]);
   const [error, setError] = useState<string | null>(null);
@@ -56,6 +66,11 @@ export const useDataSourcesListQuery = (workspaceId: string) => {
       setLoading(false);
     }
   };
+  const refetch = () => {
+    setData([]);
+    setError(null);
+    fetchDataSources();
+  };
   useEffect(() => {
     if (workspaceId) {
       fetchDataSources();
@@ -66,6 +81,7 @@ export const useDataSourcesListQuery = (workspaceId: string) => {
     data,
     error,
     loading,
+    refetch,
   };
 };
 
@@ -131,5 +147,37 @@ export const useDataSourceTableFieldsQuery = () => {
     error,
     loading,
     fetchDataSourceTableFields,
+  };
+};
+
+export const useDeleteDataSourceMutation = () => {
+  const [data, setData] = useState<any | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  const deleteDataSource = async (id: number) => {
+    try {
+      setLoading(true);
+      const { data } = await client.mutate({
+        mutation: DELETE_DATA_SOURCE,
+        variables: {
+          input: {
+            id,
+          },
+        },
+      });
+      setData(data.deleteDataSource);
+    } catch (e: any) {
+      setError(e.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return {
+    data,
+    error,
+    loading,
+    deleteDataSource,
   };
 };

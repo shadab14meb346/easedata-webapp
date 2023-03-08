@@ -4,6 +4,7 @@ import { useStyles } from './useStyles';
 import useAuth from '@utils/useAuth';
 import { getHubSpotOauthURL } from 'src/utils';
 import { useWorkspaceStore } from '@store/workspace';
+import HubSpotIcon from '@public/hubspot-icon.svg';
 
 const DataSources = () => {
   const classes = useStyles();
@@ -20,6 +21,7 @@ const DataSources = () => {
             workspaceId: selectedWorkspace?.id as string,
           })}
           target="_blank"
+          startIcon={<HubSpotIcon style={{ width: 24, height: 24 }} />}
         >
           HubSpot
         </Button>
