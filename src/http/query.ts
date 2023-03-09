@@ -106,11 +106,16 @@ export const useExecuteQuery = () => {
       setLoading(false);
     }
   };
+  const reset = () => {
+    setData([]);
+    setPageInfo(null);
+  };
   return {
     executeQuery,
     loading,
     error,
     data,
     pageInfo,
+    reset,
   };
 };

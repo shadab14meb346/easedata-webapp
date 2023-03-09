@@ -61,6 +61,7 @@ const AddQuery = () => {
     executeQuery,
     error: executeQueryError,
     pageInfo,
+    reset,
   } = useExecuteQuery();
   const {
     loading: fieldsLoading,
@@ -84,6 +85,10 @@ const AddQuery = () => {
       });
     }
   }, [selectedDataSource, selectedTable]);
+
+  useEffect(() => {
+    reset();
+  }, [selectedWorkspace?.id]);
 
   const handleExecuteQuery = () => {
     if (!selectedDataSource || !selectedTable) return;
