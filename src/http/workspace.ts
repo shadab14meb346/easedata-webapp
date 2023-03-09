@@ -76,6 +76,17 @@ export const useMyWorkspacesListQuery = () => {
   };
 };
 
+const writeTheCreatedWorkspaceToCache = (createdWorkspace: any) => {
+  const { getMyWorkspaces } = client.readQuery({
+    query: GET_MY_WORKSPACES,
+  });
+  client.writeQuery({
+    query: GET_MY_WORKSPACES,
+    data: {
+      getMyWorkspaces: [...getMyWorkspaces, createdWorkspace],
+    },
+  });
+};
 export const useCreateWorkspaceMutation = () => {
   const [data, setData] = useState<any | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -92,6 +103,7 @@ export const useCreateWorkspaceMutation = () => {
         },
       });
       setData(data.createWorkspace);
+      writeTheCreatedWorkspaceToCache(data.createWorkspace);
     } catch (e: any) {
       setError(e.message);
     } finally {
