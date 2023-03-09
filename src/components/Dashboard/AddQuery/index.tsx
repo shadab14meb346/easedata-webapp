@@ -90,6 +90,10 @@ const AddQuery = () => {
     reset();
   }, [selectedWorkspace?.id]);
 
+  useEffect(() => {
+    reset();
+  }, [selectedFields]);
+
   const handleExecuteQuery = () => {
     if (!selectedDataSource || !selectedTable) return;
     executeQuery({
@@ -244,7 +248,7 @@ const AddQuery = () => {
             sx={{ ml: 2 }}
             startIcon={<SlideshowIcon />}
           >
-            <Typography variant="h6" onClick={handleExecuteQuery}>
+            <Typography variant="h6">
               {queryExecuting ? 'Fetching...' : 'Execute Query'}
             </Typography>
           </Button>
