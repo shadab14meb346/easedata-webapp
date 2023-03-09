@@ -43,6 +43,20 @@ const INVITE_USER_TO_WORKSPACE = gql`
   }
 `;
 
+const _updateWorkspaceStore = (workspaces: any) => {
+  const persistentWorkspaceStore = localStorage.getItem('workspaceStore');
+  if (persistentWorkspaceStore) {
+    const parsedWorkspaceStore = JSON.parse(persistentWorkspaceStore);
+    updateWorkspaceStore({
+      ...parsedWorkspaceStore,
+    });
+    return;
+  }
+  // If there is no persistent workspace store, we set the first workspace as the selected workspace
+  updateWorkspaceStore({
+    selectedWorkspace: workspaces[0],
+  });
+};
 export const useMyWorkspacesListQuery = () => {
   const [data, setData] = useState<any | null>([]);
   const [error, setError] = useState<string | null>(null);
@@ -54,10 +68,7 @@ export const useMyWorkspacesListQuery = () => {
         query: GET_MY_WORKSPACES,
       });
       setData(data.getMyWorkspaces);
-      //Currently we are setting the first workspace as the selected workspace by default
-      updateWorkspaceStore({
-        selectedWorkspace: data.getMyWorkspaces[0],
-      });
+      _updateWorkspaceStore(data.getMyWorkspaces);
     } catch (e: any) {
       setError(e.message);
     } finally {
