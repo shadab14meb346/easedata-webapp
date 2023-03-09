@@ -8,7 +8,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { Box, Typography } from '@mui/material';
 import { useStyles } from './useStyles';
 import { useCreateWorkspaceMutation } from '@http/workspace';
-import { client } from '@graphql/index';
+import { useSnackbar } from 'notistack';
 
 interface ICreateWorkspaceProps {
   onSuccessfulCreate: () => void;
@@ -19,6 +19,7 @@ export default function CreateWorkspace({
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const [workspaceName, setWorkspaceName] = React.useState('');
+  const { enqueueSnackbar } = useSnackbar();
   const {
     loading,
     error,
@@ -27,11 +28,24 @@ export default function CreateWorkspace({
   } = useCreateWorkspaceMutation();
   React.useEffect(() => {
     if (error) {
+      enqueueSnackbar('Something went wrong, please try again', {
+        variant: 'error',
+        anchorOrigin: {
+          vertical: 'top',
+          horizontal: 'right',
+        },
+      });
     }
     if (createdWorkspace?.id) {
-      client.resetStore();
       setOpen(false);
       onSuccessfulCreate();
+      enqueueSnackbar('Workspace Created Successfully', {
+        variant: 'success',
+        anchorOrigin: {
+          vertical: 'top',
+          horizontal: 'right',
+        },
+      });
     }
   }, [loading, error, createdWorkspace]);
 
