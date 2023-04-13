@@ -32,6 +32,7 @@ import ShowData from '../RunQueries/ShowData';
 import Filters from './Filters';
 import { FilterType } from 'types/filter';
 import { filterOptions } from './Filters/Filter';
+import { DataSourceType } from 'types/data-source';
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
@@ -186,54 +187,60 @@ const AddQuery = () => {
             onDataSourceSelect={handleDataSourceSelect}
             className={classes.item}
           />
-          <Box mr={2} className={classes.item}>
-            <InputLabel id="table-options">Select Table</InputLabel>
-            <Select
-              labelId="demo-multiple-name-label"
-              id="table-options"
-              input={<OutlinedInput label="Name" />}
-              className={classes.select}
-              onChange={(e: SelectChangeEvent) =>
-                setSelectedTable(e.target.value as string)
-              }
-            >
-              {!selectedDataSource && <MenuItem>Select A Data Source</MenuItem>}
-              {selectedDataSource?.tables?.map((table: any) => (
-                <MenuItem key={table.name} value={table.name}>
-                  {table.label}
-                </MenuItem>
-              ))}
-            </Select>
-          </Box>
-          <Box sx={{ width: 300 }} className={classes.item}>
-            <InputLabel id="table-options">Select Fields</InputLabel>
-            <Autocomplete
-              limitTags={1}
-              filterOptions={filterOptions}
-              multiple
-              loading={fieldsLoading}
-              options={fields}
-              disableCloseOnSelect
-              getOptionLabel={(option) => option.label}
-              renderOption={(props, option, { selected }) => (
-                <li {...props}>
-                  <Checkbox
-                    icon={icon}
-                    checkedIcon={checkedIcon}
-                    style={{ marginRight: 8 }}
-                    checked={selected}
-                  />
-                  {option.label}
-                </li>
-              )}
-              renderInput={(params) => <TextField {...params} />}
-              value={selectedFields}
-              onChange={(event: any, newValue: any) => {
-                setSelectedFields(newValue);
-              }}
-              sx={{ width: '300px' }}
-            />
-          </Box>
+          {selectedDataSource?.type === DataSourceType.GoogleAnalytics && (
+            <>
+              <Box mr={2} className={classes.item}>
+                <InputLabel id="table-options">Select Table</InputLabel>
+                <Select
+                  labelId="demo-multiple-name-label"
+                  id="table-options"
+                  input={<OutlinedInput label="Name" />}
+                  className={classes.select}
+                  onChange={(e: SelectChangeEvent) =>
+                    setSelectedTable(e.target.value as string)
+                  }
+                >
+                  {!selectedDataSource && (
+                    <MenuItem>Select A Data Source</MenuItem>
+                  )}
+                  {selectedDataSource?.tables?.map((table: any) => (
+                    <MenuItem key={table.name} value={table.name}>
+                      {table.label}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </Box>
+              <Box sx={{ width: 300 }} className={classes.item}>
+                <InputLabel id="table-options">Select Fields</InputLabel>
+                <Autocomplete
+                  limitTags={1}
+                  filterOptions={filterOptions}
+                  multiple
+                  loading={fieldsLoading}
+                  options={fields}
+                  disableCloseOnSelect
+                  getOptionLabel={(option) => option.label}
+                  renderOption={(props, option, { selected }) => (
+                    <li {...props}>
+                      <Checkbox
+                        icon={icon}
+                        checkedIcon={checkedIcon}
+                        style={{ marginRight: 8 }}
+                        checked={selected}
+                      />
+                      {option.label}
+                    </li>
+                  )}
+                  renderInput={(params) => <TextField {...params} />}
+                  value={selectedFields}
+                  onChange={(event: any, newValue: any) => {
+                    setSelectedFields(newValue);
+                  }}
+                  sx={{ width: '300px' }}
+                />
+              </Box>
+            </>
+          )}
         </Box>
         <Filters fields={fields} filters={filters} setFilters={setFilters} />
         <Box mt={4} display="flex">

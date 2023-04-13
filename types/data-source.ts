@@ -7,3 +7,8 @@ export interface IDataSourceType {
   workspace_id: string;
   fields: string[];
 }
+
+export enum DataSourceType {
+  HUB_SPOT = 'HubSpot',
+  GoogleAnalytics = 'GoogleAnalytics',
+}

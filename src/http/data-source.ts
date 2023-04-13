@@ -46,6 +46,21 @@ const DELETE_DATA_SOURCE = gql`
   }
 `;
 
+const GET_DATA_SOURCE_SCHEMA = gql`
+  query GetDataSourceSchema($input: GetDataSourceSchemaInput!) {
+    getDataSourceSchema(input: $input) {
+      data_source {
+        id
+        tables {
+          label
+          name
+        }
+        type
+      }
+      schema
+    }
+  }
+`;
 export const useDataSourcesListQuery = (workspaceId: string) => {
   const [data, setData] = useState<any | null>([]);
   const [error, setError] = useState<string | null>(null);
@@ -179,5 +194,37 @@ export const useDeleteDataSourceMutation = () => {
     error,
     loading,
     deleteDataSource,
+  };
+};
+
+export const useGetDataSourceSchemaQuery = () => {
+  const [data, setData] = useState<any | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  const getDataSourceSchema = async (dataSourceId: string) => {
+    try {
+      setLoading(true);
+      const { data } = await client.query({
+        query: GET_DATA_SOURCE_SCHEMA,
+        variables: {
+          input: {
+            data_source_id: dataSourceId,
+          },
+        },
+      });
+      setData(data.getDataSourceSchema);
+    } catch (e: any) {
+      setError(e.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return {
+    data,
+    error,
+    loading,
+    getDataSourceSchema,
   };
 };
