@@ -4,6 +4,12 @@ const scopes =
 const MS_OFFICE_SCOPES = encodeURI(
   ['offline_access', 'Files.ReadWrite'].join(' ')
 );
+const GSHEET_SCOPES = encodeURI(
+  [
+    'https://www.googleapis.com/auth/spreadsheets',
+    'https://www.googleapis.com/auth/spreadsheets.readonly',
+  ].join(' ')
+);
 
 type OauthURLInput = {
   jwt: string;
@@ -31,6 +37,19 @@ export const getMSOfficeOauthURL = ({
   const INSTALL_OAUTH_URL = `https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=${process.env.NEXT_PUBLIC_MS_OFFICE_CLIENT_ID}&response_type=code&redirect_uri=${process.env.NEXT_PUBLIC_MS_OFFICE_REDIRECT_URI}&response_mode=query&scope=${MS_OFFICE_SCOPES}&state=${state}`;
   return INSTALL_OAUTH_URL;
 };
+export const getGSheetOauthURL = ({
+  jwt,
+  workspaceId,
+}: OauthURLInput): string => {
+  const state = JSON.stringify({
+    token: jwt,
+    workspaceId,
+  });
+  // const URL =
+  //   'https://accounts.google.com/o/oauth2/v2/auth?response_type=code&client_id={client_id}&redirect_uri={redirect_uri}&scope={scopes}&state={state}';
+  const INSTALL_OAUTH_URL = `https://accounts.google.com/o/oauth2/v2/auth?response_type=code&client_id=${process.env.NEXT_PUBLIC_GA_CLIENT_ID}&redirect_uri=${process.env.NEXT_PUBLIC_GA_REDIRECT_URI}&scope=${GSHEET_SCOPES}&access_type=offline&state=${state}`;
+  return INSTALL_OAUTH_URL;
+};
 
 export const getDataSourceIcon = (dataSourceType: string) => {
   switch (dataSourceType) {
@@ -38,6 +57,8 @@ export const getDataSourceIcon = (dataSourceType: string) => {
       return '/hubspot-icon.svg';
     case 'MS_OFFICE_SHEET':
       return '/ms-office-xl-icon.svg';
+    case 'GSHEET':
+      return '/gsheet-icon.svg';
     default:
       return '';
   }
