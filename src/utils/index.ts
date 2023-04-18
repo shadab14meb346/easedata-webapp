@@ -8,6 +8,7 @@ const GSHEET_SCOPES = encodeURI(
   [
     'https://www.googleapis.com/auth/spreadsheets',
     'https://www.googleapis.com/auth/spreadsheets.readonly',
+    'https://www.googleapis.com/auth/drive',
   ].join(' ')
 );
 
@@ -45,8 +46,6 @@ export const getGSheetOauthURL = ({
     token: jwt,
     workspaceId,
   });
-  // const URL =
-  //   'https://accounts.google.com/o/oauth2/v2/auth?response_type=code&client_id={client_id}&redirect_uri={redirect_uri}&scope={scopes}&state={state}';
   const INSTALL_OAUTH_URL = `https://accounts.google.com/o/oauth2/v2/auth?response_type=code&client_id=${process.env.NEXT_PUBLIC_GA_CLIENT_ID}&redirect_uri=${process.env.NEXT_PUBLIC_GA_REDIRECT_URI}&scope=${GSHEET_SCOPES}&access_type=offline&state=${state}`;
   return INSTALL_OAUTH_URL;
 };
