@@ -3,6 +3,7 @@ import { Box, List, styled, Button, ListItem } from '@mui/material';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import SourceIcon from '@mui/icons-material/Source';
 import SlideshowIcon from '@mui/icons-material/Slideshow';
+import ScheduleIcon from '@mui/icons-material/Schedule';
 
 import CreateNewFolderIcon from '@mui/icons-material/CreateNewFolder';
 import { useWorkspaceStore } from '@store/workspace';
@@ -182,6 +183,29 @@ function SidebarMenu() {
                   }}
                 >
                   Run Queries
+                </Button>
+              </ListItem>
+              <ListItem component="div">
+                <Button
+                  className={
+                    currentRoute === '/dashboard/schedule-query' ? 'active' : ''
+                  }
+                  disableRipple
+                  component="a"
+                  startIcon={
+                    <ScheduleIcon
+                      fontSize="large"
+                      style={{ width: '24px', height: '24px' }}
+                    />
+                  }
+                  onClick={() => {
+                    router.push('/dashboard/schedule-query');
+                  }}
+                  style={{
+                    borderRadius: 0,
+                  }}
+                >
+                  Schedule Queries
                 </Button>
               </ListItem>
               {selectedWorkspace?.role !== WorkspaceRole.MEMBER && (

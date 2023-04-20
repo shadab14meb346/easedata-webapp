@@ -31,6 +31,16 @@ const EXECUTE_QUERY = gql`
     }
   }
 `;
+const SCHEDULE_QUERY_MUTATION = gql`
+  mutation ScheduleQuery($input: ScheduleQueryInput!) {
+    scheduleQuery(input: $input) {
+      id
+      query_id
+      status
+      interval
+    }
+  }
+`;
 type CreateQueryInput = {
   data_source_id: number;
   description?: string;
@@ -117,5 +127,38 @@ export const useExecuteQuery = () => {
     data,
     pageInfo,
     reset,
+  };
+};
+
+type ScheduleQueryInput = {
+  query_id: string;
+  interval: string;
+  gsheet_url: string;
+};
+export const useScheduleQuery = () => {
+  const [data, setData] = useState<any | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const scheduleQuery = async (input: ScheduleQueryInput) => {
+    try {
+      setLoading(true);
+      const { data } = await client.mutate({
+        mutation: SCHEDULE_QUERY_MUTATION,
+        variables: {
+          input,
+        },
+      });
+      setData(data.scheduleQuery);
+    } catch (e: any) {
+      setError(e.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+  return {
+    scheduleQuery,
+    loading,
+    error,
+    data,
   };
 };
